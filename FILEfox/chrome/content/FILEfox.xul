@@ -47,7 +47,7 @@
             <menupopup>
                 <menuitem
                     id="FILEFox-menu-item-About"
-                    label="About FILEfox"
+                    label="About"
                     oncommand="window.extension_FILEfox.about()" />
             </menupopup>
         </menu>
