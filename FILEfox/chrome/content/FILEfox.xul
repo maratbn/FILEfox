@@ -26,7 +26,7 @@
   -
   - -->
 
-<overlay id="sample" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<overlay id="FILEfox-browser-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
     <statusbar id="status-bar">
         <statusbarpanel id="panel-FILEfox" label="FILEfox"  />
     </statusbar>
