@@ -1,2 +1,3 @@
 content     FILEfox    chrome/content/
+locale      FILEfox     en-US   chrome/locale/en-US/
 overlay chrome://browser/content/browser.xul chrome://FILEfox/content/FILEfox.xul

@@ -31,6 +31,14 @@
         <statusbarpanel id="panel-FILEfox" label="FILEfox"  />
     </statusbar>
 
+    <stringbundleset>
+        <stringbundle
+            id="extension_FILEfox_string_bundle"
+            src="chrome://FILEfox/locale/FILEfox.properties" />
+    </stringbundleset>
+ 
+    <script type="application/x-javascript" src="chrome://FILEfox/content/FILEfox.js" />
+
     <menupopup id="menu_ToolsPopup">
         <menu
             id="FILEfox-menu"
@@ -40,7 +48,7 @@
                 <menuitem
                     id="FILEFox-menu-item-About"
                     label="About FILEfox"
-                    oncommand="alert('About FILEfox clicked.');" />
+                    oncommand="window.extension_FILEfox.about()" />
             </menupopup>
         </menu>
     </menupopup>
