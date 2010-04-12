@@ -21,20 +21,11 @@
     <!-- Front End MetaData -->
     <em:name>FILEfox</em:name>
     <em:description>
-        FILEfox local file proxy for web applications running on FireFox.
-
-        FILEfox gives JavaScript-based web applications a civilized way to request manual user permission to load specific local files for local analysis.
-        This eliminates the traditional requirement for the data to reside on remote web server(s), enabling better privacy, and further opening the door to desktop computing via web applications.
-        This is similar to the traditional HTML form file upload mechanism, but the data is fed directly to a JavaScript callback function, and does not have to be uploaded to the server, unless the JavaScript does so intentionally.
-        Web applications ask for permission via this extension.  Permission can be granted to load only one file at a time, and each file is loaded only at the time the permission is granted.
-
-        WARNING:  MALICIOUS WEB APPLICATIONS MAY UPLOAD ANY DATA AVAILABLE TO MALICIOUS SERVERS.
-        ONLY USE THIS EXTENSION WITH THE WEBSITES YOU TRUST.
-        DO NOT USE THIS EXTENSION TO OPEN FILES FOR PHISHING WEBSITES.
-        DO NOT USE THIS EXTENSION TO OPEN FILES FOR WEBSITES THAT ALLOW ARBITRARY 3-RD PARTY JAVASCRIPT APPLICATIONS (SUCH AS FACEBOOK).
-        DO NOT USE THIS EXTENSION TO OPEN FILES CONTAINING DATA SUCH AS AUTHENTICATION, OPERATING SYSTEM CONFIGURATION, OR FINANCIAL INFORMATION.
+        Local file proxy for web applications running on Firefox.
 
         ** RECOMMENDED FOR EXPERIENCED USERS ONLY **
+
+        For more information, please see 'Tools' -> 'FILEfox' -> 'About'
     </em:description>
     <em:creator>Marat Nepomnyashy</em:creator>
     <em:homepageURL>http://www.maratbn.com/FILEfox/</em:homepageURL>
