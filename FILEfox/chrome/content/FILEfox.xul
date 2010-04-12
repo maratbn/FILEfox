@@ -30,4 +30,19 @@
     <statusbar id="status-bar">
         <statusbarpanel id="panel-FILEfox" label="FILEfox"  />
     </statusbar>
+
+    <menupopup id="menu_ToolsPopup">
+        <menu
+            id="FILEfox-menu"
+            label="FILEfox"
+            insertafter="javascriptConsole,devToolsSeparator">
+            <menupopup>
+                <menuitem
+                    id="FILEFox-menu-item-About"
+                    label="About FILEfox"
+                    oncommand="alert('About FILEfox clicked.');" />
+            </menupopup>
+        </menu>
+    </menupopup>
+
 </overlay>
