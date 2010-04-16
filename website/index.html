@@ -17,7 +17,22 @@
     </head>
     <body class='FILEfox_support'>
         <h1>Welcome to the FILEfox Firefox extension support website.</h1>
+        <div class='tester'>
+            <h3>Test FILEfox in your browser:</h3>
+            <script type='text/javascript'>
+                // <!--
+                if (window.nsFILEfox) {
+                    document.writeln("You have the FILEfox extension installed.");
+                    
+                    document.writeln(nsFILEfox.test('abc'));
+                } else {
+                    document.writeln("You do NOT have the FILEfox extension installed.");
+                }
+                // -->
+            </script>
+        </div>
         <div class='disclaimer'>
+        <h3>Disclaimer:</h3>
             <p>
                 FILEfox extension is a local file proxy for web applications running on Firefox.
             </p>
