@@ -1,0 +1,1 @@
+/usr/lib/xulrunner/xpidl -m typelib -w -v -I /usr/lib/xulrunner/sdk/idl/ -o nsIFILEfox nsIFILEfox.idl
