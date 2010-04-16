@@ -1,0 +1,11 @@
+#include "nsISupports.idl"
+
+[scriptable, uuid(7faaf2e7-a039-4a86-89f7-1406110c908c)]
+interface nsIFILEfox : nsISupports {
+
+    // Read-only version string:
+    readonly attribute string version;
+
+    // Temporary function for testing:
+    string test(in string str);
+};
