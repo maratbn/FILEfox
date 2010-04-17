@@ -3,9 +3,21 @@
 [scriptable, uuid(7faaf2e7-a039-4a86-89f7-1406110c908c)]
 interface nsIFILEfox : nsISupports {
 
-    // Read-only version string:
+    /**
+     *  Read-only version string:
+     */
     readonly attribute string version;
 
-    // Temporary function for testing:
-    string test(in string str);
+    /**
+     *  This function is used to have the FILEfox extension request from the
+     *  user to manually select a file to load.  The FILEfox extension will
+     *  then load the file and relay its contents to the calling JavaScript
+     *  application.
+     *
+     *  strMessageToUser        String      A textual request message to
+     *                                      display to the user, possibly
+     *                                      explaining why the application is
+     *                                      requesting a file.
+     */
+    boolean requestFileToLoad(in string strMessageToUser);
 };
