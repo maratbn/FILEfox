@@ -10,14 +10,16 @@ interface nsIFILEfox : nsISupports {
 
     /**
      *  This function is used to have the FILEfox extension request from the
-     *  user to manually select a file to load.  The FILEfox extension will
-     *  then load the file and relay its contents to the calling JavaScript
-     *  application.
+     *  user to manually select an ASCII text file to load.  The FILEfox
+     *  extension will then load the ASCII text file, and return its contents
+     *  in a string.
+     *
+     *  Function returns [null] in case of an error.
      *
      *  strMessageToUser        String      A textual request message to
      *                                      display to the user, possibly
      *                                      explaining why the application is
-     *                                      requesting a file.
+     *                                      requesting an ASCII text file.
      */
-    boolean requestFileToLoad(in string strMessageToUser);
+    string requestASCIIFileToLoad(in string strMessageToUser);
 };
