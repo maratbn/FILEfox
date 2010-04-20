@@ -21,13 +21,52 @@
             <h3>Test FILEfox in your browser:</h3>
             <script type='text/javascript'>
                 // <!--
-                if (window.nsFILEfox) {
-                    document.writeln("You have the FILEfox extension installed.");
-                    
-                    document.writeln(nsFILEfox.test('abc'));
-                } else {
-                    document.writeln("You do NOT have the FILEfox extension installed.");
+                function doLoadFile() {
+                    var observer =  {
+                                        onLoadedTextFile: function(totalLines, arrLines) {
+                                            var preOutput = document.getElementById('output');
+                                            preOutput.innerHTML = "";
+
+                                            var spanStatus = document.getElementById('status');
+                                            spanStatus.innerHTML = "";
+
+                                            var i = 0;
+
+                                            (function() {
+                                                for (var j = 0; j < 1000 && i < totalLines; i++, j++) {
+                                                    preOutput.appendChild(document.createTextNode(arrLines[i]));
+                                                }
+                                                spanStatus.innerHTML = "Loaded " + i + " lines out of " + totalLines + "  " + ((i / totalLines) * 100).toFixed(2) + "%" + (i == totalLines && "  load complete" || "");
+                                                if (i < totalLines) {
+                                                    setTimeout(arguments.callee, 100);
+                                                }
+                                            })();
+                                        }
+                                    }
+                    var success = nsFILEfox.requestASCIIFileToLoad(
+                                                "This is the FILEfox demonstration website.  Specify an ASCII text file with test data to experience the file loading process via the FILEfox extension.",
+                                                observer);
+                    if (!success) {
+                        alert("Demonstration website:  Could not get a file via the FILEfox Firefox extension.  The user has either canceled, there was an error in some part of the process, or the file was empty.");
+                        return;
+                    }
                 }
+                if (window.nsFILEfox) {
+                    document.writeln("<p>");
+                    document.writeln("You have the FILEfox extension installed and enabled.");
+                    document.writeln("</p>");
+                    document.writeln("<p>");
+                    document.writeln("You can <a href='#' onClick='doLoadFile()'>test-load</a> an ASCII text file off your hard drive into the area below:");
+                    document.writeln("</p>");
+                    document.writeln("<p>");
+                    document.writeln("<span id='status'></span>");
+                    document.writeln("</p>");
+                    document.writeln("<pre id='output' style='background-color:yellow;border:1px solid blue;min-height:50px;max-height:200px;overflow:auto;'></pre>");
+                    document.writeln("<br>");
+                } else {
+                    document.writeln("You do NOT have the FILEfox extension installed, or it is explicitly disabled.");
+                }
+                
                 // -->
             </script>
         </div>
