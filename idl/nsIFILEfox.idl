@@ -5,9 +5,10 @@ interface nsIFILEfoxObserver : nsISupports {
     /**
      *  Callback for when a text file has been loaded successfully.
      *
-     *  @param  strContents         String                  The contents of the text file.
+     *  @param  totalLines          Number                  The total number of lines read from the text file.
+     *  @param  arrLines            Array                   An Array of Strings with the actual lines.
      */
-    void onLoadedTextFile(in string strContents);
+    void onLoadedTextFile(in unsigned long totalLines, [const, array, size_is(totalLines)] in string arrLines);
 };
 
 [scriptable, uuid(7faaf2e7-a039-4a86-89f7-1406110c908c)]
