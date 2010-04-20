@@ -1,5 +1,15 @@
 #include "nsISupports.idl"
 
+[scriptable, uuid(e82cca84-1222-4443-a044-246f9802b372)]
+interface nsIFILEfoxObserver : nsISupports {
+    /**
+     *  Callback for when a text file has been loaded successfully.
+     *
+     *  @param  strContents         String                  The contents of the text file.
+     */
+    void onLoadedTextFile(in string strContents);
+};
+
 [scriptable, uuid(7faaf2e7-a039-4a86-89f7-1406110c908c)]
 interface nsIFILEfox : nsISupports {
 
@@ -9,17 +19,17 @@ interface nsIFILEfox : nsISupports {
     readonly attribute string version;
 
     /**
-     *  This function is used to have the FILEfox extension request from the
-     *  user to manually select an ASCII text file to load.  The FILEfox
-     *  extension will then load the ASCII text file, and return its contents
-     *  in a string.
+     *  This function is used to have the FILEfox extension request from the user to manually select an ASCII text
+     *  file to load.  The function will then initiate the file loading process, and return [ true ] or [ false ]
+     *  depending on success.  The file contents will be loaded asynchroneously, and returned in the observer callback
+     *  function 'onLoadedTextFile(...)'.
      *
-     *  Function returns [null] in case of an error.
      *
-     *  strMessageToUser        String      A textual request message to
-     *                                      display to the user, possibly
-     *                                      explaining why the application is
-     *                                      requesting an ASCII text file.
+     *  @param  strMessageToUser    String                  A textual request message to display to the user, possibly
+     *                                                      explaining why the application is requesting an ASCII text
+     *                                                      file.
+     *
+     *  @param  observer            nsIFILEfoxObserver      Observer with the callback
      */
-    string requestASCIIFileToLoad(in string strMessageToUser);
+    boolean requestASCIIFileToLoad(in string strMessageToUser, in nsIFILEfoxObserver observer);
 };
