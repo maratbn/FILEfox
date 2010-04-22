@@ -97,7 +97,7 @@ nsFILEfox.prototype = {
      *
      *  @param  observer            nsIFILEfoxObserver      Observer with the callback
      */
-    requestASCIIFileToLoad:     function(strMessageToUser, observer) {
+    requestASCIIFile:           function(strMessageToUser, observer) {
                                     // Get a reference to the DOM window to be able to communicate with the user:
                                     var window_mediator = this._obtainComponentService(
                                                                     null,
