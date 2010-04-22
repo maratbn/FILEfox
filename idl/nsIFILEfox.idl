@@ -47,9 +47,9 @@ interface nsIFILEfoxObserver : nsISupports {
 interface nsIFILEfox : nsISupports {
 
     /**
-     *  Read-only version string:
+     *  Returns the version of the currently installed FILEfox extension.
      */
-    readonly attribute string version;
+    string getVersion();
 
     /**
      *  This function is used to have the FILEfox extension request from the user to manually select an ASCII text
