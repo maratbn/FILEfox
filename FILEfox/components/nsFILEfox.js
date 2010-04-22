@@ -72,9 +72,17 @@ nsFILEfox.prototype = {
     // Interface nsIFILEfox:
 
     /**
-     *  Read-only version string:
+     *  Returns the version of the currently installed FILEfox extension.
      */
-    version:                    '0.1',
+    getVersion:                 function() {
+                                    var application = this._obtainComponentService(
+                                                                    null,
+                                                                    '@mozilla.org/fuel/application;1',
+                                                                    Components.interfaces.fuelIApplication);
+
+                                    var extension = application && application.extensions && application.extensions.get('FILEfox@maratbn.com');
+                                    return extension && extension.version;
+                                },
 
     /**
      *  This function is used to have the FILEfox extension request from the user to manually select an ASCII text
