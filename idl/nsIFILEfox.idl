@@ -32,15 +32,31 @@
 
 #include "nsISupports.idl"
 
-[scriptable, uuid(e82cca84-1222-4443-a044-246f9802b372)]
-interface nsIFILEfoxObserver : nsISupports {
+/**
+ *  This interface is intended to pass text files between the NSFILEfox XPCOM object and the browser DOM.
+ */
+[scriptable, uuid(0e7951ba-f28d-4ee8-8b65-79691fb2d15a)]
+interface nsIFILEfoxTextFile : nsISupports {
+
     /**
-     *  Callback for when a text file has been loaded successfully.
-     *
-     *  @param  totalLines          Number                  The total number of lines read from the text file.
-     *  @param  arrLines            Array                   An Array of Strings with the actual lines.
+     *  The encoding with which this text file is encoded.
      */
-    void onLoadedTextFile(in unsigned long totalLines, [const, array, size_is(totalLines)] in string arrLines);
+    readonly attribute string encoding;
+
+    /**
+     *  Returns the total number of lines.
+     *
+     *  Have to store the text file line by line rather than in a single string, as otherwise a huge file requiring to
+     *  be accomodated in a huge string would overwhelm the browser's JavaScript engine.
+     */
+    unsigned long getTotalLines();
+
+    /**
+     *  Returns a single line out of the text file, including the line termination carriage return character sequence.
+     *
+     *  @param  indexLine           Number                  0-based index of the line.
+     */
+    string getLine(in unsigned long indexLine);
 };
 
 [scriptable, uuid(7faaf2e7-a039-4a86-89f7-1406110c908c)]
@@ -52,17 +68,13 @@ interface nsIFILEfox : nsISupports {
     string getVersion();
 
     /**
-     *  This function is used to have the FILEfox extension request from the user to manually select an ASCII text
-     *  file to load.  The function will then initiate the file loading process, and return [ true ] or [ false ]
-     *  depending on success.  The file contents will be loaded asynchroneously, and returned in the observer callback
-     *  function 'onLoadedTextFile(...)'.
-     *
+     *  Causes the FILEfox extension to request from the user to manually select an ASCII text file to load.  The
+     *  function will then initiate a synchroneous file loading process, and at the conclusion return an object
+     *  corresponding to the 'nsIFILEfoxTextFile' contract with the file contents, or a falsy value on failure.
      *
      *  @param  strMessageToUser    String                  A textual request message to display to the user, possibly
      *                                                      explaining why the application is requesting an ASCII text
      *                                                      file.
-     *
-     *  @param  observer            nsIFILEfoxObserver      Observer with the callback
      */
-    boolean requestASCIIFile(in string strMessageToUser, in nsIFILEfoxObserver observer);
+    nsIFILEfoxTextFile requestASCIIFile(in string strMessageToUser);
 };
