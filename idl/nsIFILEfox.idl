@@ -64,5 +64,5 @@ interface nsIFILEfox : nsISupports {
      *
      *  @param  observer            nsIFILEfoxObserver      Observer with the callback
      */
-    boolean requestASCIIFileToLoad(in string strMessageToUser, in nsIFILEfoxObserver observer);
+    boolean requestASCIIFile(in string strMessageToUser, in nsIFILEfoxObserver observer);
 };
