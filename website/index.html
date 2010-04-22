@@ -50,7 +50,7 @@
                                                 for (var j = 0; j < 1000 && i < totalLines; i++, j++) {
                                                     preOutput.appendChild(document.createTextNode(arrLines[i]));
                                                 }
-                                                spanStatus.innerHTML = "Loaded " + i + " lines out of " + totalLines + "  " + ((i / totalLines) * 100).toFixed(2) + "%" + (i == totalLines && "  load complete" || "");
+                                                spanStatus.innerHTML = "Rendered " + i + " lines out of " + totalLines + "  " + ((i / totalLines) * 100).toFixed(2) + "%" + (i == totalLines && "  load complete" || "");
                                                 if (i < totalLines) {
                                                     setTimeout(arguments.callee, 100);
                                                 }
