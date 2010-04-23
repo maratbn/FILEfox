@@ -157,7 +157,7 @@ nsFILEfox.prototype = {
      *                                                      explaining why the application is requesting an ASCII text
      *                                                      file.
      */
-    requestASCIIFile:           function(strMessageToUser, observer) {
+    requestLoadASCIIFile:       function(strMessageToUser, observer) {
                                     // Get a reference to the DOM window to be able to communicate with the user:
                                     var window_mediator = this._obtainComponentService(
                                                                     null,
