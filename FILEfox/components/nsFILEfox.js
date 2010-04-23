@@ -68,9 +68,9 @@ nsFILEfoxTextFileReadOut.prototype = {
     encoding:                   "",
 
     /**
-     *  Total number of letters in the text file.
+     *  Total number of characters in the text file.
      */
-    totalLetters:               0,
+    totalChars:                 0,
 
     /**
      *  Total number of lines in the text file.
@@ -89,9 +89,9 @@ nsFILEfoxTextFileReadOut.prototype = {
                                     return this._arrLines && this._arrLines[indexLine];
                                 },
 
-    setData:                    function(strEncoding, totalLetters, totalLines, arrLines) {
+    setData:                    function(strEncoding, totalChars, totalLines, arrLines) {
                                     this.encoding = strEncoding;
-                                    this.totalLetters = totalLetters;
+                                    this.totalChars = totalChars;
                                     this.totalLines = totalLines;
                                     this._arrLines = arrLines;
                                 }
