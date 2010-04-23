@@ -223,14 +223,12 @@ nsFILEfox.prototype = {
                                                             file_input_stream.available(),
                                                             converter_input_stream.DEFAULT_REPLACEMENT_CHARACTER);
 
-                                    var arrContents = [], totalRead = 0;
+                                    var arrContents = [];
                                     for (var isThereMore = true; isThereMore;) {
                                         var objRead = {};
                                         var totalToRead = file_input_stream.available();
                                         isThereMore = converter_input_stream.readString(totalToRead, objRead);
                                         arrContents.push(objRead.value);
-
-                                        totalRead += totalToRead;
                                     }
 
                                     converter_input_stream.close();
