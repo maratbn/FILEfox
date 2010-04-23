@@ -95,5 +95,5 @@ interface nsIFILEfox : nsISupports {
      *                                                      explaining why the application is requesting an ASCII text
      *                                                      file.
      */
-    nsIFILEfoxTextFile requestASCIIFile(in string strMessageToUser);
+    nsIFILEfoxTextFile requestLoadASCIIFile(in string strMessageToUser);
 };
