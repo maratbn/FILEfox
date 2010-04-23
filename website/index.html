@@ -114,7 +114,11 @@
                             document.writeln("<pre id='output' class='file_contents_container'></pre>");
                             document.writeln("<br>");
                         } else {
-                            document.writeln("You do NOT currently have the FILEfox extension installed, or it is explicitly disabled.");
+                            if (navigator && navigator.userAgent.match(/Firefox/)) {
+                                document.writeln("You do NOT currently have the FILEfox extension installed, or it is explicitly disabled.");
+                            } else {
+                                document.writeln("This feature is currently not supported on the browser you are using to view this page.");
+                            }
                         }
                         
                         // -->
