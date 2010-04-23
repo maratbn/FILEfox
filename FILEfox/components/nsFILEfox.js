@@ -30,21 +30,22 @@
  */
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 
-nsFILEfoxTextFileOut_interfaces = [
-                                    Components.interfaces.nsIFILEfoxTextFileOut,
+nsFILEfoxTextFileReadOut_interfaces = [
+                                    Components.interfaces.nsIFILEfoxTextFileReadOut,
+                                    Components.interfaces.nsIFILEfoxTextFileRead,
                                     Components.interfaces.nsIFILEfoxTextFile,
                                     Components.interfaces.nsIClassInfo,
                                     Components.interfaces.nsISupports
                                 ];
 
-function nsFILEfoxTextFileOut() {
+function nsFILEfoxTextFileReadOut() {
 }
 
-nsFILEfoxTextFileOut.prototype = {
+nsFILEfoxTextFileReadOut.prototype = {
     //  Interaface nsIClassInfo:
     classDescription:           "This XPCOM component is part of the FILEfox Firefox extension.",
     classID:                    Components.ID("{9d163612-2c51-430d-9460-62cb0f2ffe46}"),
-    contractID:                 "@marat.nepomnyashy/ns_file_fox_text_file_out;1",
+    contractID:                 "@marat.nepomnyashy/ns_file_fox_text_file_read_out;1",
     flags:                      Components.interfaces.nsIClassInfo.DOM_OBJECT,
     implementationLanguage:     Components.interfaces.nsIProgrammingLanguage.JAVASCRIPT,
 
@@ -53,18 +54,23 @@ nsFILEfoxTextFileOut.prototype = {
                                 },
 
     getInterfaces:              function(totalInterfaces) {
-                                    totalInterfaces.value = nsFILEfoxTextFileOut_interfaces.length;
-                                    return nsFILEfoxTextFileOut_interfaces;
+                                    totalInterfaces.value = nsFILEfoxTextFileReadOut_interfaces.length;
+                                    return nsFILEfoxTextFileReadOut_interfaces;
                                 },
 
     //  Interface nsISupports:
-    QueryInterface:             XPCOMUtils.generateQI(nsFILEfoxTextFileOut_interfaces),
+    QueryInterface:             XPCOMUtils.generateQI(nsFILEfoxTextFileReadOut_interfaces),
 
     // Interface nsIFILEfoxTextFile:
     /**
      *  The encoding with which this text file is encoded.
      */
     encoding:                   "",
+
+    /**
+     *  Total number of letters in the text file.
+     */
+    totalLetters:               0,
 
     /**
      *  Total number of lines in the text file.
@@ -83,8 +89,9 @@ nsFILEfoxTextFileOut.prototype = {
                                     return this._arrLines && this._arrLines[indexLine];
                                 },
 
-    setData:                    function(strEncoding, totalLines, arrLines) {
+    setData:                    function(strEncoding, totalLetters, totalLines, arrLines) {
                                     this.encoding = strEncoding;
+                                    this.totalLetters = totalLetters;
                                     this.totalLines = totalLines;
                                     this._arrLines = arrLines;
                                 }
@@ -233,9 +240,9 @@ nsFILEfox.prototype = {
 
                                     var file_fox_text_file = this._obtainComponentInstance(
                                                                     window,
-                                                                    '@marat.nepomnyashy/ns_file_fox_text_file_out;1',
-                                                                    Components.interfaces.nsIFILEfoxTextFileOut);
-                                    file_fox_text_file.setData(strEncoding, arrLines.length, arrLines);
+                                                                    '@marat.nepomnyashy/ns_file_fox_text_file_read_out;1',
+                                                                    Components.interfaces.nsIFILEfoxTextFileReadOut);
+                                    file_fox_text_file.setData(strEncoding, strContents.length, arrLines.length, arrLines);
                                     return file_fox_text_file;
                                 },
 
@@ -335,7 +342,7 @@ nsFILEfox.prototype = {
                                 }
 };
 
-var components = [nsFILEfox, nsFILEfoxTextFileOut];
+var components = [nsFILEfox, nsFILEfoxTextFileReadOut];
 function NSGetModule(compMgr, fileSpec) {
     return XPCOMUtils.generateModule(components);
 }
