@@ -33,7 +33,7 @@
 #include "nsISupports.idl"
 
 /**
- *  This interface is intended to pass text files between the NSFILEfox XPCOM object and the browser DOM.
+ *  This interface is intended to pass text files between the 'nsFILEfox' XPCOM object and the browser DOM.
  */
 [scriptable, uuid(0e7951ba-f28d-4ee8-8b65-79691fb2d15a)]
 interface nsIFILEfoxTextFile : nsISupports {
