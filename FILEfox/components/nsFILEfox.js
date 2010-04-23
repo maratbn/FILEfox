@@ -30,6 +30,13 @@
  */
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 
+nsFILEfoxTextFileOut_interfaces = [
+                                    Components.interfaces.nsIFILEfoxTextFileOut,
+                                    Components.interfaces.nsIFILEfoxTextFile,
+                                    Components.interfaces.nsIClassInfo,
+                                    Components.interfaces.nsISupports
+                                ];
+
 function nsFILEfoxTextFileOut() {
 }
 
@@ -46,24 +53,13 @@ nsFILEfoxTextFileOut.prototype = {
                                 },
 
     getInterfaces:              function(totalInterfaces) {
-                                    var interfaces = [
-                                                        Components.interfaces.nsIFILEfoxTextFileOut,
-                                                        Components.interfaces.nsIFILEfoxTextFile,
-                                                        Components.interfaces.nsIClassInfo,
-                                                        Components.interfaces.nsISupports
-                                                    ];
-                                    totalInterfaces.value = interfaces.length;
-                                    return interfaces;
+                                    totalInterfaces.value = nsFILEfoxTextFileOut_interfaces.length;
+                                    return nsFILEfoxTextFileOut_interfaces;
                                 },
 
     //  Interface nsISupports:
-    QueryInterface:             XPCOMUtils.generateQI(
-                                                    [
-                                                        Components.interfaces.nsIFILEfoxTextFileOut,
-                                                        Components.interfaces.nsIFILEfoxTextFile,
-                                                        Components.interfaces.nsIClassInfo,
-                                                        Components.interfaces.nsISupports
-                                                    ]),
+    QueryInterface:             XPCOMUtils.generateQI(nsFILEfoxTextFileOut_interfaces),
+
     // Interface nsIFILEfoxTextFile:
     /**
      *  The encoding with which this text file is encoded.
@@ -94,6 +90,13 @@ nsFILEfoxTextFileOut.prototype = {
                                 }
 }
 
+
+nsFILEfox_interfaces =          [
+                                    Components.interfaces.nsIFILEfox,
+                                    Components.interfaces.nsIClassInfo,
+                                    Components.interfaces.nsISupports
+                                ];
+
 function nsFILEfox() {
 }
 
@@ -110,13 +113,8 @@ nsFILEfox.prototype = {
                                 },
 
     getInterfaces:              function(totalInterfaces) {
-                                    var interfaces = [
-                                                        Components.interfaces.nsIFILEfox,
-                                                        Components.interfaces.nsIClassInfo,
-                                                        Components.interfaces.nsISupports
-                                                    ];
-                                    totalInterfaces.value = interfaces.length;
-                                    return interfaces;
+                                    totalInterfaces.value = nsFILEfox_interfaces.length;
+                                    return nsFILEfox_interfaces;
                                 },
 
     _xpcom_categories: [{
@@ -125,12 +123,7 @@ nsFILEfox.prototype = {
     }],
 
     //  Interface nsISupports:
-    QueryInterface:             XPCOMUtils.generateQI(
-                                                    [
-                                                        Components.interfaces.nsIFILEfox,
-                                                        Components.interfaces.nsIClassInfo,
-                                                        Components.interfaces.nsISupports
-                                                    ]),
+    QueryInterface:             XPCOMUtils.generateQI(nsFILEfox_interfaces),
 
                                                     
     // Interface nsIFILEfox:
