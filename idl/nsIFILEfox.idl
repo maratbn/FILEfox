@@ -65,9 +65,9 @@ interface nsIFILEfoxTextFile : nsISupports {
 [scriptable, uuid(e7c31f54-51e1-44b9-beb0-2986756e6be2)]
 interface nsIFILEfoxTextFileRead : nsIFILEfoxTextFile {
     /**
-     *  Total number of letters in the text file.
+     *  Total number of characters in the text file.
      */
-    readonly attribute unsigned long totalLetters;
+    readonly attribute unsigned long totalChars;
 };
 
 /**
