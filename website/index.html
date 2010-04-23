@@ -21,6 +21,13 @@
                 margin-left:                    20px;
                 margin-right:                   20px;
             }
+            .FILEfox_support .section_content .file_contents_container {
+                background-color:               yellow;
+                border:                         1px solid blue;
+                min-height:                     50px;
+                max-height:                     200px;
+                overflow:                       auto;
+            }
             .FILEfox_support .disclaimer {
                 /*
                 width:                          80%;
@@ -104,7 +111,7 @@
                             document.writeln("<p>");
                             document.writeln("<span id='status'></span>");
                             document.writeln("</p>");
-                            document.writeln("<pre id='output' style='background-color:yellow;border:1px solid blue;min-height:50px;max-height:200px;overflow:auto;'></pre>");
+                            document.writeln("<pre id='output' class='file_contents_container'></pre>");
                             document.writeln("<br>");
                         } else {
                             document.writeln("You do NOT currently have the FILEfox extension installed, or it is explicitly disabled.");
