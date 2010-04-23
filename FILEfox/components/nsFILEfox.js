@@ -30,6 +30,70 @@
  */
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 
+function nsFILEfoxTextFileOut() {
+}
+
+nsFILEfoxTextFileOut.prototype = {
+    //  Interaface nsIClassInfo:
+    classDescription:           "This XPCOM component is part of the FILEfox Firefox extension.",
+    classID:                    Components.ID("{9d163612-2c51-430d-9460-62cb0f2ffe46}"),
+    contractID:                 "@marat.nepomnyashy/ns_file_fox_text_file_out;1",
+    flags:                      Components.interfaces.nsIClassInfo.DOM_OBJECT,
+    implementationLanguage:     Components.interfaces.nsIProgrammingLanguage.JAVASCRIPT,
+
+    getHelperForLanguage:       function(language) {
+                                    return null;
+                                },
+
+    getInterfaces:              function(totalInterfaces) {
+                                    var interfaces = [
+                                                        Components.interfaces.nsIFILEfoxTextFileOut,
+                                                        Components.interfaces.nsIFILEfoxTextFile,
+                                                        Components.interfaces.nsIClassInfo,
+                                                        Components.interfaces.nsISupports
+                                                    ];
+                                    totalInterfaces.value = interfaces.length;
+                                    return interfaces;
+                                },
+
+    //  Interface nsISupports:
+    QueryInterface:             XPCOMUtils.generateQI(
+                                                    [
+                                                        Components.interfaces.nsIFILEfoxTextFileOut,
+                                                        Components.interfaces.nsIFILEfoxTextFile,
+                                                        Components.interfaces.nsIClassInfo,
+                                                        Components.interfaces.nsISupports
+                                                    ]),
+    // Interface nsIFILEfoxTextFile:
+    /**
+     *  The encoding with which this text file is encoded.
+     */
+    encoding:                   "",
+
+    /**
+     *  Total number of lines in the text file.
+     *
+     *  Have to store the text file line by line rather than in a single string, as otherwise a huge file requiring to
+     *  be accomodated in a huge string would overwhelm the browser's JavaScript engine.
+     */
+    totalLines:                 0,
+
+    /**
+     *  Returns a single line out of the text file, including the line termination carriage return character sequence.
+     *
+     *  @param  indexLine           Number                  0-based index of the line.
+     */
+    getLine:                    function(indexLine) {
+                                    return this._arrLines && this._arrLines[indexLine];
+                                },
+
+    setData:                    function(strEncoding, totalLines, arrLines) {
+                                    this.encoding = strEncoding;
+                                    this.totalLines = totalLines;
+                                    this._arrLines = arrLines;
+                                }
+}
+
 function nsFILEfox() {
 }
 
@@ -85,17 +149,13 @@ nsFILEfox.prototype = {
                                 },
 
     /**
-     *  This function is used to have the FILEfox extension request from the user to manually select an ASCII text
-     *  file to load.  The function will then initiate the file loading process, and return [ true ] or [ false ]
-     *  depending on success.  The file contents will be loaded asynchroneously, and returned in the observer callback
-     *  function 'onLoadedTextFile(...)'.
-     *
+     *  Causes the FILEfox extension to request from the user to manually select an ASCII text file to load.  The
+     *  function will then initiate a synchroneous file loading process, and at the conclusion return an object
+     *  corresponding to the 'nsIFILEfoxTextFile' contract with the file contents, or a falsy value on failure.
      *
      *  @param  strMessageToUser    String                  A textual request message to display to the user, possibly
      *                                                      explaining why the application is requesting an ASCII text
      *                                                      file.
-     *
-     *  @param  observer            nsIFILEfoxObserver      Observer with the callback
      */
     requestASCIIFile:           function(strMessageToUser, observer) {
                                     // Get a reference to the DOM window to be able to communicate with the user:
@@ -104,21 +164,21 @@ nsFILEfox.prototype = {
                                                                     '@mozilla.org/appshell/window-mediator;1',
                                                                     Components.interfaces.nsIWindowMediator);
                                     var window = window_mediator && window_mediator.getMostRecentWindow(null);
-                                    if (!window) return false;
+                                    if (!window) return null;
 
-                                    if (!window.confirm(this._generateConfirmationMsg(window, strMessageToUser))) return false;
+                                    if (!window.confirm(this._generateConfirmationMsg(window, strMessageToUser))) return null;
 
                                     // Obtain the user's Desktop directory:
                                     var directory_service = this._obtainComponentService(
                                                                     window,
                                                                     '@mozilla.org/file/directory_service;1',
                                                                     Components.interfaces.nsIProperties);
-                                    if (!directory_service) return false;
+                                    if (!directory_service) return null;
 
                                     var fileDesktop = directory_service.get('Desk', Components.interfaces.nsIFile);
                                     if (!fileDesktop || !fileDesktop.path) {
                                         window.alert("nsFILEfox error:  Unable to determine the user's desktop directory.");
-                                        return false;
+                                        return null;
                                     }
 
                                     // Display the file picker:
@@ -127,69 +187,63 @@ nsFILEfox.prototype = {
                                                                     window,
                                                                     '@mozilla.org/filepicker;1',
                                                                     nsi_file_picker);
-                                    if (!file_picker) return false;
+                                    if (!file_picker) return null;
 
                                     file_picker.init(window, "Loading an ASCII text file for website via the FILEfox Firefox extension.", nsi_file_picker.modeOpen);
                                     file_picker.appendFilters(nsi_file_picker.filterAll);
 
                                     var ret = file_picker.show();
-                                    if (ret !== nsi_file_picker.returnOK) return false;
+                                    if (ret !== nsi_file_picker.returnOK) return null;
 
                                     var file = file_picker.file;
                                     if (!file || !file.path) {
                                         window.alert("nsFILEfox error:  Unable to determine which file the user has decided to open.");
-                                        return false;
+                                        return null;
                                     }
 
-                                    var io_service = this._obtainComponentService(
+                                    var file_input_stream = this._obtainComponentInstance(
                                                                     window,
-                                                                    '@mozilla.org/network/io-service;1',
-                                                                    Components.interfaces.nsIIOService);
-                                    if (!io_service) return false;
+                                                                    '@mozilla.org/network/file-input-stream;1',
+                                                                    Components.interfaces.nsIFileInputStream);
+                                    if (!file_input_stream) return null;
 
-                                    var file_uri = io_service.newFileURI(file);
-                                    if (!file_uri) {
-                                        window.alert("nsFILEfox error:  Unable to determine the URI for file '" + file.path + "'.");
-                                        return false;
-                                    }
+                                    file_input_stream.init(file, 1, 0, false);
 
-                                    var channel = io_service.newChannelFromURI(file_uri);
-                                    if (!channel) {
-                                        window.alert("nsFILEfox error:  Unable to obtain a channel for the URI '" + file_uri + "'.");
-                                        return false;
-                                    }
-
-                                    var that = this;
-
-                                    var observerSL =    {
-                                                            onStreamComplete: function(aLoader, aContext, aStatus, aLength, aResult) {
-                                                                var scriptable_unicode_converter = that._obtainComponentInstance(
-                                                                        window,
-                                                                        '@mozilla.org/intl/scriptableunicodeconverter',
-                                                                        Components.interfaces.nsIScriptableUnicodeConverter);
-                                                                if (!scriptable_unicode_converter) return;
-
-                                                                scriptable_unicode_converter.charset = 'us-ascii';
-
-                                                                try {
-                                                                    var strContents = scriptable_unicode_converter.convertFromByteArray(aResult, aLength);
-                                                                    var arrLines = strContents.split(/(\r\n|\r|\n)/);
-                                                                    observer.onLoadedTextFile(arrLines.length, arrLines);
-                                                                } catch (e) {
-                                                                    window.alert("nsFILEfox error:  Encountered a problem decoding the '" + scriptable_unicode_converter.charset + "' character set in file '" + file.path + "'.  Exception object:  " + e);
-                                                                }
-                                                            }
-                                                        };
-                                    var stream_loader = this._obtainComponentInstance(
+                                    var converter_input_stream = this._obtainComponentInstance(
                                                                     window,
-                                                                    '@mozilla.org/network/stream-loader;1',
-                                                                    Components.interfaces.nsIStreamLoader);
-                                    if (!stream_loader) return false;
+                                                                    '@mozilla.org/intl/converter-input-stream;1',
+                                                                    Components.interfaces.nsIConverterInputStream);
+                                    if (!converter_input_stream) return null;
 
-                                    stream_loader.init(observerSL);
-                                    channel.asyncOpen(stream_loader, channel);
+                                    var strEncoding = 'us-ascii';
 
-                                    return true;
+                                    converter_input_stream.init(
+                                                            file_input_stream,
+                                                            strEncoding,
+                                                            file_input_stream.available(),
+                                                            converter_input_stream.DEFAULT_REPLACEMENT_CHARACTER);
+
+                                    var arrContents = [], totalRead = 0;
+                                    for (var isThereMore = true; isThereMore;) {
+                                        var objRead = {};
+                                        var totalToRead = file_input_stream.available();
+                                        isThereMore = converter_input_stream.readString(totalToRead, objRead);
+                                        arrContents.push(objRead.value);
+
+                                        totalRead += totalToRead;
+                                    }
+
+                                    converter_input_stream.close();
+
+                                    var strContents = arrContents.join("");
+                                    var arrLines = strContents.split(/(\r\n|\r|\n)/);
+
+                                    var file_fox_text_file = this._obtainComponentInstance(
+                                                                    window,
+                                                                    '@marat.nepomnyashy/ns_file_fox_text_file_out;1',
+                                                                    Components.interfaces.nsIFILEfoxTextFileOut);
+                                    file_fox_text_file.setData(strEncoding, arrLines.length, arrLines);
+                                    return file_fox_text_file;
                                 },
 
     _generateConfirmationMsg:   function(window, strMessageToUser) {
@@ -288,7 +342,7 @@ nsFILEfox.prototype = {
                                 }
 };
 
-var components = [nsFILEfox];
+var components = [nsFILEfox, nsFILEfoxTextFileOut];
 function NSGetModule(compMgr, fileSpec) {
     return XPCOMUtils.generateModule(components);
 }
