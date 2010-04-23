@@ -54,7 +54,7 @@
     <!-- Front End MetaData -->
     <em:name>FILEfox</em:name>
     <em:description>
-        Local file proxy for web applications running on Firefox.
+        Local file access proxy for JavaScript-based web applications running on Firefox.
 
         ** RECOMMENDED FOR EXPERIENCED USERS ONLY **
 
