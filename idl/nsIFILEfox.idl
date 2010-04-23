@@ -60,11 +60,22 @@ interface nsIFILEfoxTextFile : nsISupports {
 };
 
 /**
- *  This interface is used internally by the 'nsFILEfox' XPCOM object to construct an object conforming to the 'nsIFILEfoxTextFile' contract.
+ *  This interface is returned from the 'nxFILEfox' XPCOM object with a newly read text file.
+ */
+[scriptable, uuid(e7c31f54-51e1-44b9-beb0-2986756e6be2)]
+interface nsIFILEfoxTextFileRead : nsIFILEfoxTextFile {
+    /**
+     *  Total number of letters in the text file.
+     */
+    readonly attribute unsigned long totalLetters;
+};
+
+/**
+ *  This interface is used internally by the 'nsFILEfox' XPCOM object to construct an object conforming to the 'nsIFILEfoxTextFileRead' contract.
  */
 [scriptable, uuid(9d163612-2c51-430d-9460-62cb0f2ffe46)]
-interface nsIFILEfoxTextFileOut : nsIFILEfoxTextFile {
-    void setData(in string strEncoding, in unsigned long totalLines, [const, array, size_is(totalLines)] in string arrLines);
+interface nsIFILEfoxTextFileReadOut : nsIFILEfoxTextFileRead {
+    void setData(in string strEncoding, in unsigned long totalLetters, in unsigned long totalLines, [const, array, size_is(totalLines)] in string arrLines);
 };
 
 [scriptable, uuid(7faaf2e7-a039-4a86-89f7-1406110c908c)]
