@@ -125,6 +125,96 @@
                     </script>
                 </div>
             </li>
+            <li class='documentation'>
+                <h3>FILEfox API Documentation:</h3>
+                <div class='section_content'>
+                    <p>
+                        The FILEfox extension makes itself available to every website loaded in the browser DOM via the global 'nsFILEfox' object.
+                        The 'nsFILEfox' is an XPCOM component conforming to the XPCOM interface 'nsIFILEfox'.
+                        <p>
+                            Methods:
+                            <ul>
+                                <li>
+                                    <h5>String getVersion()</h5>
+                                    <p>
+                                        Returns the version of the currently installed FILEfox extension.
+                                    </p>
+                                </li>
+                                <li><h5>nsIFILEfoxTextFileRead requestLoadASCIIFile(String strMessageToUser)</h5>
+                                    <p>
+                                        Causes the FILEfox extension to request from the user to manually select an ASCII text file to load.  The
+                                        function will then initiate a synchroneous file loading process, and at the conclusion return an object
+                                        corresponding to the 'nsIFILEfoxTextFileRead' contract with the file contents, or a falsy value on failure.
+                                        <p>
+                                            Parameters:
+                                            <ul>
+                                                <li>
+                                                    <h6>String strMessageToUser</h6>
+                                                    <p>
+                                                        A textual request message to display to the user, possibly explaining why
+                                                        the application is requesting an ASCII text file.
+                                                    </p>
+                                                </li>
+                                            </ul>
+                                        </p>
+                                    </p>
+                                </li>
+                            </ul>
+                        </p>
+                    </p>
+                    <p>
+                        The anonymous 'nsIFILEfoxTextFileRead' object returned by the method
+                        'nsFILEfox.requestLoadASCIIFile(...)' contains the contents of the text file loaded.
+                        <p>
+                            Properties:
+                            <ul>
+                                <li>
+                                    <h5>String encoding</h5>
+                                    <p>
+                                        The encoding with which this text file is encoded.
+                                    </p>
+                                </li>
+                                <li>
+                                    <h5>Number totalLines</h5>
+                                    <p>
+                                        Total number of lines in the text file.
+                                    </p>
+                                    <p>
+                                        The text file is stored line by line rather than in a single string, as otherwise a huge file in a huge string 
+                                        would overwhelm the browser's JavaScript engine.
+                                    </p>
+                                </li>
+                                <li>
+                                    <h5>Number totalChars</h5>
+                                    <p>
+                                        Total number of characters in the text file.
+                                    </p>
+                                </li>
+                            </ul>
+                            Methods:
+                            <ul>
+                                <li>
+                                    <h5>String getLine(Number indexLine)</h5>
+                                    <p>
+                                        Returns a single line out of the text file, including the line termination carriage return character sequence.
+                                        <p>
+                                            Parameters:
+                                            <ul>
+                                                <li>
+                                                    <h6>Number indexLine</h6>
+                                                    <p>
+                                                        0-based index of the line.
+                                                    </p>
+                                                </li>
+                                            </ul>
+                                        </p>
+                                    </p>
+                                </li>
+                            </ul>
+                        </p>
+                    </p>
+                </div>
+            </li>
             <li class='disclaimer'>
                 <h3>Disclaimer:</h3>
                 <div class='section_content'>
