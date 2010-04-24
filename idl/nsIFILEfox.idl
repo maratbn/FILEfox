@@ -46,8 +46,8 @@ interface nsIFILEfoxTextFile : nsISupports {
     /**
      *  Total number of lines in the text file.
      *
-     *  Have to store the text file line by line rather than in a single string, as otherwise a huge file requiring to
-     *  be accomodated in a huge string would overwhelm the browser's JavaScript engine.
+     *  The text file is stored line by line rather than in a single string, as otherwise a huge file in a huge string
+     *  would overwhelm the browser's JavaScript engine.
      */
     readonly attribute unsigned long totalLines;
 
