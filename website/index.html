@@ -147,8 +147,8 @@
                                         var lineStart = Math.floor(divOutput.scrollTop / CONST_heightLine);
                                         var heightLinePortion = divOutput.scrollTop % CONST_heightLine;
 
-                                        var divOutputText = document.getElementById('output_text');
-                                        divOutputText.style.top = (divOutput.scrollTop - heightLinePortion) + "px";
+                                        var preOutputText = document.getElementById('output_text');
+                                        preOutputText.style.top = (divOutput.scrollTop - heightLinePortion) + "px";
 
                                         if (lineStart != lineRendered) {
                                             var lineEnd = lineStart + 20;
@@ -156,10 +156,10 @@
                                             for (var i = lineStart; i < lineEnd && i < text_fileDisplaying.totalLines; i++) {
                                                 arrText.push(text_fileDisplaying.getLine(i));
                                             }
-                                            while (divOutputText.firstChild) {
-                                                divOutputText.removeChild(divOutputText.firstChild);
+                                            while (preOutputText.firstChild) {
+                                                preOutputText.removeChild(preOutputText.firstChild);
                                             }
-                                            divOutputText.appendChild(document.createTextNode(arrText.join("")));
+                                            preOutputText.appendChild(document.createTextNode(arrText.join("")));
                                             lineRendered = lineStart;
                                         }
                                     }
