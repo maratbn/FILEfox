@@ -31,6 +31,10 @@
             .FILEfox_support .section_content .code {
                 color:                          #3366ff;
             }
+            .FILEfox_support .section_content .code .code_op {
+                color:                          black;
+                font-weight:                    bold;
+            }
             .FILEfox_support .disclaimer {
                 /*
                 width:                          80%;
@@ -138,13 +142,13 @@
                             Methods:
                             <ul>
                                 <li>
-                                    <h5 class='code'>String getVersion()</h5>
+                                    <h5 class='code'>String getVersion<span class='code_op'>()</span></h5>
                                     <p>
                                         Returns the version of the currently installed FILEfox extension.
                                     </p>
                                 </li>
                                 <li>
-                                    <h5 class='code'>nsIFILEfoxTextFileRead requestLoadASCIIFile(String strMessageToUser)</h5>
+                                    <h5 class='code'>nsIFILEfoxTextFileRead requestLoadASCIIFile<span class='code_op'>(</span>String strMessageToUser<span class='code_op'>)</span></h5>
                                     <p>
                                         Causes the FILEfox extension to request from the user to manually select an ASCII text file to load.  The
                                         function will then initiate a synchroneous file loading process, and at the conclusion return an object
@@ -167,8 +171,8 @@
                         </p>
                     </p>
                     <p>
-                        The anonymous '<span class='code'>nsIFILEfoxTextFileRead</span>' object returned by the method
-                        '<span class='code'>nsFILEfox.requestLoadASCIIFile(...)</span>' contains the contents of the text file loaded.
+                        The anonymous '<span class='code'>nsIFILEfox<span class='code_op'>.</span>TextFileRead</span>' object returned by the method
+                        '<span class='code'>nsFILEfox<span class='code_op'>.</span>requestLoadASCIIFile<span class='code_op'>(...)</span></span>' contains the contents of the text file loaded.
                         <p>
                             Properties:
                             <ul>
@@ -198,7 +202,7 @@
                             Methods:
                             <ul>
                                 <li>
-                                    <h5 class='code'>String getLine(Number indexLine)</h5>
+                                    <h5 class='code'>String getLine<span class='code_op'>(</span>Number indexLine<span class='code_op'>)</span></h5>
                                     <p>
                                         Returns a single line out of the text file, including the line termination carriage return character sequence.
                                         <p>
