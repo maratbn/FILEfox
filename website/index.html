@@ -24,6 +24,7 @@
             .FILEfox_support .section_content .file_contents_container {
                 background-color:               #ffff77;
                 border:                         1px solid blue;
+                line-height:                    16px;
                 min-height:                     50px;
                 max-height:                     200px;
                 overflow:                       auto;
@@ -103,6 +104,62 @@
                 <div class='section_content'>
                     <script type='text/javascript'>
                         // <!--
+                        function TextFileView() {
+                            var CONST_marginBottom      = 30;
+                            var CONST_heightLine        = 16;
+
+                            var text_fileDisplaying     = null;         //  !!  IMPORTANT
+                                                                        //  !!
+                                                                        //  !!  The object containing the file contents is kept in a private local variable
+                                                                        //  !!  to prevent other scripts on this page from accessing the file contents.
+                            var lineRendered            = null;
+                            var totalHeight             = 0;
+
+                            this.displayTextFile = function(text_fileDisplay) {
+                                lineRendered = null;
+
+                                text_fileDisplaying = text_fileDisplay;
+
+                                var spanStatus = document.getElementById('status');
+                                spanStatus.innerHTML = "Total Lines: " + text_fileDisplay.totalLines + "  Total Characters: " + text_fileDisplay.totalChars;
+
+                                totalHeight = text_fileDisplay.totalLines * CONST_heightLine + CONST_marginBottom;
+
+                                var divOutputScrolling = document.getElementById('output_scrolling');
+                                divOutputScrolling.style.height = totalHeight + 'px';
+                                
+                            },
+
+                            this.timer = function() {
+                                var divOutput = document.getElementById('output');
+                                if (divOutput) {
+                                    if (text_fileDisplaying) {
+                                        var divOutputText = document.getElementById('output_text');
+                                        divOutputText.style.top = divOutput.scrollTop + "px";
+                                        var lineStart = Math.floor(divOutput.scrollTop / CONST_heightLine);
+                                        if (lineStart != lineRendered) {
+                                            var lineEnd = lineStart + 20;
+                                            var arrText = [];
+                                            for (var i = lineStart; i < lineEnd && i < text_fileDisplaying.totalLines; i++) {
+                                                arrText.push(text_fileDisplaying.getLine(i));
+                                            }
+                                            while (divOutputText.firstChild) {
+                                                divOutputText.removeChild(divOutputText.firstChild);
+                                            }
+                                            divOutputText.appendChild(document.createTextNode(arrText.join("")));
+                                            lineRendered = lineStart;
+                                        }
+                                    }
+                                }
+
+                                setTimeout('text_file_view.timer()', 250);
+                            }
+
+                            this.timer();
+                        }
+
+                        var text_file_view = new TextFileView();
+
                         function doLoadFile() {
                             var text_file = window.nsFILEfox.requestLoadASCIIFile("This is the FILEfox demonstration website.  Specify an ASCII text file with test data to experience the file loading process via the FILEfox extension.");
                             if (!text_file) {
@@ -110,24 +167,9 @@
                                 return;
                             }
 
-                            var preOutput = document.getElementById('output');
-                            preOutput.innerHTML = "";
-
-                            var spanStatus = document.getElementById('status');
-                            spanStatus.innerHTML = "";
-
-                            var i = 0;
-
-                            (function() {
-                                for (var j = 0; j < 1000 && i < text_file.totalLines; i++, j++) {
-                                    preOutput.appendChild(document.createTextNode(text_file.getLine(i)));
-                                }
-                                spanStatus.innerHTML = "Rendered " + i + " lines out of " + text_file.totalLines + "  " + ((i / text_file.totalLines) * 100).toFixed(2) + "%" + (i == text_file.totalLines && "  load complete" || "");
-                                if (i < text_file.totalLines) {
-                                    setTimeout(arguments.callee, 100);
-                                }
-                            })();
+                            text_file_view.displayTextFile(text_file);
                         }
+
                         if (window.nsFILEfox) {
                             document.writeln("<p>");
                             document.writeln("You have the FILEfox extension version ", window.nsFILEfox.getVersion(), " installed and enabled.");
@@ -138,7 +180,11 @@
                             document.writeln("<p>");
                             document.writeln("<span id='status'></span>");
                             document.writeln("</p>");
-                            document.writeln("<pre id='output' class='file_contents_container'></pre>");
+                            document.writeln("<div id='output' class='file_contents_container'>");
+                            document.writeln(   "<div id='output_scrolling' style='position:relative'>");
+                            document.writeln(       "<pre id='output_text' style='position:absolute;margin:0;'><p style='color:#777777'>Loaded text file displays here...</p></pre>");
+                            document.writeln(   "</div>");
+                            document.writeln("</div>");
                             document.writeln("<br>");
                         } else {
                             if (navigator && navigator.userAgent.match(/Firefox/)) {
