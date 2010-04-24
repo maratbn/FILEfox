@@ -115,13 +115,23 @@
                             var lineRendered            = null;
                             var totalHeight             = 0;
 
+                            function _processHugeNumberInsertCommas(number) {
+                                var strNumber = number.toFixed(0).toString();
+                                var strProcessed = "";
+                                for (var i = 0; i < strNumber.length; i++) {
+                                    if (i > 0 && i % 3 == 0) strProcessed = ',' + strProcessed;
+                                    strProcessed = strNumber[strNumber.length - 1 - i] + strProcessed;
+                                }
+                                return strProcessed;
+                            }
+
                             this.displayTextFile = function(text_fileDisplay) {
                                 lineRendered = null;
 
                                 text_fileDisplaying = text_fileDisplay;
 
                                 var spanStatus = document.getElementById('status');
-                                spanStatus.innerHTML = "Total Lines: " + text_fileDisplay.totalLines + "  Total Characters: " + text_fileDisplay.totalChars;
+                                spanStatus.innerHTML = "Total Lines: " + _processHugeNumberInsertCommas(text_fileDisplay.totalLines) + "  Total Characters: " + _processHugeNumberInsertCommas(text_fileDisplay.totalChars);
 
                                 totalHeight = text_fileDisplay.totalLines * CONST_heightLine + CONST_marginBottom;
 
