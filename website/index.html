@@ -35,6 +35,10 @@
                 color:                          black;
                 font-weight:                    bold;
             }
+            .FILEfox_support .section_content .item_desc {
+                margin-left:                    10px;
+                margin-right:                   10px;
+            }
             .FILEfox_support .disclaimer {
                 /*
                 width:                          80%;
@@ -143,29 +147,33 @@
                             <ul>
                                 <li>
                                     <h5 class='code'>String getVersion<span class='code_op'>()</span></h5>
-                                    <p>
-                                        Returns the version of the currently installed FILEfox extension.
-                                    </p>
+                                    <div class='item_desc'>
+                                        <p>
+                                            Returns the version of the currently installed FILEfox extension.
+                                        </p>
+                                    </div>
                                 </li>
                                 <li>
                                     <h5 class='code'>nsIFILEfoxTextFileRead requestLoadASCIIFile<span class='code_op'>(</span>String strMessageToUser<span class='code_op'>)</span></h5>
-                                    <p>
-                                        Causes the FILEfox extension to request from the user to manually select an ASCII text file to load.  The
-                                        function will then initiate a synchroneous file loading process, and at the conclusion return an object
-                                        corresponding to the '<span class='code'>nsIFILEfoxTextFileRead</span>' contract with the file contents, or a falsy value on failure.
+                                    <div class='item_desc'>
                                         <p>
-                                            Parameters:
-                                            <ul>
-                                                <li>
-                                                    <h6 class='code'>String strMessageToUser</h6>
-                                                    <p>
-                                                        A textual request message to display to the user, possibly explaining why
-                                                        the application is requesting an ASCII text file.
-                                                    </p>
-                                                </li>
-                                            </ul>
+                                            Causes the FILEfox extension to request from the user to manually select an ASCII text file to load.  The
+                                            function will then initiate a synchroneous file loading process, and at the conclusion return an object
+                                            corresponding to the '<span class='code'>nsIFILEfoxTextFileRead</span>' contract with the file contents, or a falsy value on failure.
+                                            <p>
+                                                Parameters:
+                                                <ul>
+                                                    <li>
+                                                        <h6 class='code'>String strMessageToUser</h6>
+                                                        <p class='item_desc'>
+                                                            A textual request message to display to the user, possibly explaining why
+                                                            the application is requesting an ASCII text file.
+                                                        </p>
+                                                    </li>
+                                                </ul>
+                                            </p>
                                         </p>
-                                    </p>
+                                    </div>
                                 </li>
                             </ul>
                         </p>
@@ -178,45 +186,53 @@
                             <ul>
                                 <li>
                                     <h5 class='code'>String encoding</h5>
-                                    <p>
-                                        The encoding with which this text file is encoded.
-                                    </p>
+                                    <div class='item_desc'>
+                                        <p>
+                                            The encoding with which this text file is encoded.
+                                        </p>
+                                    </div>
                                 </li>
                                 <li>
                                     <h5 class='code'>Number totalLines</h5>
-                                    <p>
-                                        Total number of lines in the text file.
-                                    </p>
-                                    <p>
-                                        The text file is stored line by line rather than in a single string, as otherwise a huge file in a huge string 
-                                        would overwhelm the browser's JavaScript engine.
-                                    </p>
+                                    <div class='item_desc'>
+                                        <p>
+                                            Total number of lines in the text file.
+                                        </p>
+                                        <p>
+                                            The text file is stored line by line rather than in a single string, as otherwise a huge file in a huge string 
+                                            would overwhelm the browser's JavaScript engine.
+                                        </p>
+                                    </div>
                                 </li>
                                 <li>
                                     <h5 class='code'>Number totalChars</h5>
-                                    <p>
-                                        Total number of characters in the text file.
-                                    </p>
+                                    <div class='item_desc'>
+                                        <p>
+                                            Total number of characters in the text file.
+                                        </p>
+                                    </div>
                                 </li>
                             </ul>
                             Methods:
                             <ul>
                                 <li>
                                     <h5 class='code'>String getLine<span class='code_op'>(</span>Number indexLine<span class='code_op'>)</span></h5>
-                                    <p>
-                                        Returns a single line out of the text file, including the line termination carriage return character sequence.
+                                    <div class='item_desc'>
                                         <p>
-                                            Parameters:
-                                            <ul>
-                                                <li>
-                                                    <h6 class='code'>Number indexLine</h6>
-                                                    <p>
-                                                        0-based index of the line.
-                                                    </p>
-                                                </li>
-                                            </ul>
+                                            Returns a single line out of the text file, including the line termination carriage return character sequence.
+                                            <p>
+                                                Parameters:
+                                                <ul>
+                                                    <li>
+                                                        <h6 class='code'>Number indexLine</h6>
+                                                        <p class='item_desc'>
+                                                            0-based index of the line.
+                                                        </p>
+                                                    </li>
+                                                </ul>
+                                            </p>
                                         </p>
-                                    </p>
+                                    </div>
                                 </li>
                             </ul>
                         </p>
