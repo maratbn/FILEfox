@@ -134,9 +134,12 @@
                                 var divOutput = document.getElementById('output');
                                 if (divOutput) {
                                     if (text_fileDisplaying) {
-                                        var divOutputText = document.getElementById('output_text');
-                                        divOutputText.style.top = divOutput.scrollTop + "px";
                                         var lineStart = Math.floor(divOutput.scrollTop / CONST_heightLine);
+                                        var heightLinePortion = divOutput.scrollTop % CONST_heightLine;
+
+                                        var divOutputText = document.getElementById('output_text');
+                                        divOutputText.style.top = (divOutput.scrollTop - heightLinePortion) + "px";
+
                                         if (lineStart != lineRendered) {
                                             var lineEnd = lineStart + 20;
                                             var arrText = [];
