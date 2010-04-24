@@ -89,11 +89,11 @@ interface nsIFILEfox : nsISupports {
     /**
      *  Causes the FILEfox extension to request from the user to manually select an ASCII text file to load.  The
      *  function will then initiate a synchroneous file loading process, and at the conclusion return an object
-     *  corresponding to the 'nsIFILEfoxTextFile' contract with the file contents, or a falsy value on failure.
+     *  corresponding to the 'nsIFILEfoxTextFileRead' contract with the file contents, or a falsy value on failure.
      *
      *  @param  strMessageToUser    String                  A textual request message to display to the user, possibly
      *                                                      explaining why the application is requesting an ASCII text
      *                                                      file.
      */
-    nsIFILEfoxTextFile requestLoadASCIIFile(in string strMessageToUser);
+    nsIFILEfoxTextFileRead requestLoadASCIIFile(in string strMessageToUser);
 };
