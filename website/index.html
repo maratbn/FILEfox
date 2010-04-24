@@ -28,6 +28,9 @@
                 max-height:                     200px;
                 overflow:                       auto;
             }
+            .FILEfox_support .section_content .code {
+                color:                          #3366ff;
+            }
             .FILEfox_support .disclaimer {
                 /*
                 width:                          80%;
@@ -129,27 +132,28 @@
                 <h3>FILEfox API Documentation:</h3>
                 <div class='section_content'>
                     <p>
-                        The FILEfox extension makes itself available to every website loaded in the browser DOM via the global 'nsFILEfox' object.
-                        The 'nsFILEfox' is an XPCOM component conforming to the XPCOM interface 'nsIFILEfox'.
+                        The FILEfox extension makes itself available to every website loaded in the browser DOM via the global '<span class='code'>nsFILEfox'</span> object.
+                        The '<span class='code'>nsFILEfox</span>' is an XPCOM component conforming to the XPCOM interface '<span class='code'>nsIFILEfox</span>'.
                         <p>
                             Methods:
                             <ul>
                                 <li>
-                                    <h5>String getVersion()</h5>
+                                    <h5 class='code'>String getVersion()</h5>
                                     <p>
                                         Returns the version of the currently installed FILEfox extension.
                                     </p>
                                 </li>
-                                <li><h5>nsIFILEfoxTextFileRead requestLoadASCIIFile(String strMessageToUser)</h5>
+                                <li>
+                                    <h5 class='code'>nsIFILEfoxTextFileRead requestLoadASCIIFile(String strMessageToUser)</h5>
                                     <p>
                                         Causes the FILEfox extension to request from the user to manually select an ASCII text file to load.  The
                                         function will then initiate a synchroneous file loading process, and at the conclusion return an object
-                                        corresponding to the 'nsIFILEfoxTextFileRead' contract with the file contents, or a falsy value on failure.
+                                        corresponding to the '<span class='code'>nsIFILEfoxTextFileRead</span>' contract with the file contents, or a falsy value on failure.
                                         <p>
                                             Parameters:
                                             <ul>
                                                 <li>
-                                                    <h6>String strMessageToUser</h6>
+                                                    <h6 class='code'>String strMessageToUser</h6>
                                                     <p>
                                                         A textual request message to display to the user, possibly explaining why
                                                         the application is requesting an ASCII text file.
@@ -163,19 +167,19 @@
                         </p>
                     </p>
                     <p>
-                        The anonymous 'nsIFILEfoxTextFileRead' object returned by the method
-                        'nsFILEfox.requestLoadASCIIFile(...)' contains the contents of the text file loaded.
+                        The anonymous '<span class='code'>nsIFILEfoxTextFileRead</span>' object returned by the method
+                        '<span class='code'>nsFILEfox.requestLoadASCIIFile(...)</span>' contains the contents of the text file loaded.
                         <p>
                             Properties:
                             <ul>
                                 <li>
-                                    <h5>String encoding</h5>
+                                    <h5 class='code'>String encoding</h5>
                                     <p>
                                         The encoding with which this text file is encoded.
                                     </p>
                                 </li>
                                 <li>
-                                    <h5>Number totalLines</h5>
+                                    <h5 class='code'>Number totalLines</h5>
                                     <p>
                                         Total number of lines in the text file.
                                     </p>
@@ -185,7 +189,7 @@
                                     </p>
                                 </li>
                                 <li>
-                                    <h5>Number totalChars</h5>
+                                    <h5 class='code'>Number totalChars</h5>
                                     <p>
                                         Total number of characters in the text file.
                                     </p>
@@ -194,14 +198,14 @@
                             Methods:
                             <ul>
                                 <li>
-                                    <h5>String getLine(Number indexLine)</h5>
+                                    <h5 class='code'>String getLine(Number indexLine)</h5>
                                     <p>
                                         Returns a single line out of the text file, including the line termination carriage return character sequence.
                                         <p>
                                             Parameters:
                                             <ul>
                                                 <li>
-                                                    <h6>Number indexLine</h6>
+                                                    <h6 class='code'>Number indexLine</h6>
                                                     <p>
                                                         0-based index of the line.
                                                     </p>
