@@ -233,8 +233,21 @@ nsFILEfox.prototype = {
 
                                     converter_input_stream.close();
 
+                                    // The following splits the string with the text file contents into a line by line array.
                                     var strContents = arrContents.join("");
-                                    var arrLines = strContents.split(/(\r\n|\r|\n)/);
+                                    var arrSplit = strContents.split(/(\r\n|\r|\n)/);
+                                    // The 'arrSplit' variable is an array where the line text and the line delimiters are at separate indices.
+                                    // Need to process that into another array where the line delimiters are appended to the ends of their associated lines.
+                                    var arrLines = [];
+                                    var strLine = "";
+                                    for (var i = 0; i < arrSplit.length; i ++) {
+                                        strLine += arrSplit[i];
+                                        if (strLine.match(/\r\n|\r|\n/)) {
+                                            arrLines.push(strLine);
+                                            strLine = "";
+                                        }
+                                    }
+                                    if (strLine) arrLines.push(strLine);
 
                                     var file_fox_text_file = this._obtainComponentInstance(
                                                                     window,
