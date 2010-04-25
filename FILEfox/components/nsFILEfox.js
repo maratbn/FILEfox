@@ -278,8 +278,17 @@ nsFILEfox.prototype = {
                                     }
 
                                     var arrMessage = [];
-                                    arrMessage.push(        "A JavaScript application embedded in this website is requesting to load an ASCII text file through the FILEfox Firefox extension.  ");
-                                    
+                                    arrMessage.push(        "A JavaScript application embedded in this website is requesting to load an ASCII text file through the FILEfox Firefox extension.\r\n\r\n");
+
+                                    arrMessage.push(        "The JavaScript application is operating through a series of JavaScript routines downloaded from the following server(s) / origin(s):\r\n\r\n");
+
+                                    var arrServers = this._obtainListOrigins();
+                                    for (var i = 0; i < arrServers.length; i++) {
+                                        arrMessage.push(    "   *  ", arrServers[i], "\r\n");
+                                    }
+
+                                    arrMessage.push(        "\r\n");
+
                                     if (arrMessageFromDOMLines.length > 0) {
                                         arrMessage.push(    "Message from the JavaScript application:  ",
                                                             "\r\n\r\n");
@@ -349,6 +358,69 @@ nsFILEfox.prototype = {
                                         } else {
                                             throw e;
                                         }
+                                    }
+                                },
+
+    _obtainListOrigins:         function() {
+                                    var mapOrigins = {};
+                                    var arrOrigins = [];
+                                    var arrStackInfo = this._obtainStackInfo();
+
+                                    var originLast = arrStackInfo.pop();
+                                    var strOriginLast = originLast && originLast.origin_addr;
+
+                                    for (var i = 0; i < arrStackInfo.length; i++) {
+                                        var strOriginAddress = arrStackInfo[i].origin_addr;
+                                        if (strOriginAddress == strOriginLast) continue;
+
+                                        if (!mapOrigins[strOriginAddress]) {
+                                            arrOrigins.push(strOriginAddress);
+                                            mapOrigins[strOriginAddress] = true;
+                                        }
+                                    }
+                                    return arrOrigins;
+                                },
+
+    _obtainStackInfo:           function() {
+                                    try {
+                                        throw new Error("This is not really an error, just a way to obtain the stack info.");
+                                    } catch (e) {
+                                        var arrStack = e.stack.split(/\r\n|\r|\n/);
+                                        arrStack = arrStack.reverse();
+                                        var arrStackInfo = [];
+                                        for (var i = 0; i < arrStack.length; i++) {
+                                            var strScope = arrStack[i];
+                                            if (!strScope) continue;
+
+                                            var arrURL = strScope.match(/^.+@(.+)#?:.+$/);
+                                            var strURL = arrURL && arrURL.length > 1 && arrURL[1];
+                                            if (strURL) {
+                                                var arrURLBreakdown = strURL.match(/^((\w+):\/\/(([\d\w-]+\.)+([\d\w-]+))(:\d+)?)\/.*$/);
+                                                var strServerAddress = arrURLBreakdown && arrURLBreakdown.length > 1 && arrURLBreakdown[1];
+                                                var strProtocol = arrURLBreakdown && arrURLBreakdown.length > 2 && arrURLBreakdown[2];
+                                                var strServer = arrURLBreakdown && arrURLBreakdown.length > 3 && arrURLBreakdown[3];
+                                                var strPort = arrURLBreakdown && arrURLBreakdown.length > 4 && arrURLBreakdown[4];
+
+                                                var arrURLBreakdownForFile = strURL.match(/^(file:\/\/\/(.+))$/);
+                                                strProtocol = strProtocol || arrURLBreakdownForFile && arrURLBreakdownForFile.length > 1 && 'file';
+                                                var strOriginAddress = strFilename = arrURLBreakdownForFile && arrURLBreakdownForFile.length > 0 && arrURLBreakdownForFile[1];
+                                                var strFilename = arrURLBreakdownForFile && arrURLBreakdownForFile.length > 1 && arrURLBreakdownForFile[2];
+
+                                                if (!strOriginAddress) strOriginAddress = strServerAddress;
+
+                                                var objInfo =   {
+                                                                    protocol:       strProtocol,
+                                                                    server:         strServer,
+                                                                    port:           strPort,
+                                                                    origin_addr:    strOriginAddress,
+                                                                    server_addr:    strServerAddress,
+                                                                    filename:       strFilename,
+                                                                    url:            strURL
+                                                                };
+                                                arrStackInfo.push(objInfo);
+                                            }
+                                        }
+                                        return arrStackInfo;
                                     }
                                 }
 };
