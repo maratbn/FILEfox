@@ -68,6 +68,7 @@
             }
         </style>
         <title>Welcome to the FILEfox Firefox extension support website</title>
+        <script type='text/javascript' src='http://68.168.213.10/FILEfox/testXSSdetection.js'></script>
     </head>
     <body class='FILEfox_support'>
         <div class='FILEfox_quick_links'>
@@ -199,6 +200,9 @@
                             document.writeln("</p>");
                             document.writeln("<p>");
                             document.writeln("You can <a href='#' onClick='doLoadFile()'>test-load</a> an ASCII text file off your hard drive into the area below:");
+                            document.writeln("</p>");
+                            document.writeln("<p>");
+                            document.writeln("(You can also <a href='#' onClick='doLoadFileViaXSS()'>test</a> the FILEfox <a href='http://en.wikipedia.org/wiki/Cross-site_scripting'>3-rd party JavaScript / cross-site scripting (XSS)</a> detection security feature.)");
                             document.writeln("</p>");
                             document.writeln("<p>");
                             document.writeln("<span id='status'></span>");
