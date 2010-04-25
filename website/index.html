@@ -138,6 +138,10 @@
                                 var spanStatus = document.getElementById('status');
                                 spanStatus.innerHTML = "Total Lines: " + _processHugeNumberInsertCommas(text_fileDisplay.totalLines) + "  Total Characters: " + _processHugeNumberInsertCommas(text_fileDisplay.totalChars);
 
+                                // Scroll the viewport back to the top for the new file:
+                                var divOutput = document.getElementById('output');
+                                divOutput.scrollTop = 0;
+
                                 totalHeight = text_fileDisplay.totalLines * CONST_heightLine + CONST_marginBottom;
 
                                 var divOutputScrolling = document.getElementById('output_scrolling');
