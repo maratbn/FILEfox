@@ -203,7 +203,13 @@
                             if (navigator && navigator.userAgent.match(/Firefox/)) {
                                 document.writeln("You do NOT currently have the FILEfox extension installed, or it is explicitly disabled.");
                             } else {
-                                document.writeln("This feature is currently not supported on the browser you are using to view this page.");
+                                document.writeln(
+                                            [
+                                                "<span style='color:red'>",
+                                                    "Firefox web browser not detected.  This feature currently works only on the Firefox web browser.  ",
+                                                    "Please view this page with the Firefox web browser.",
+                                                "</span>"
+                                            ].join(""));
                             }
                         }
                         
@@ -211,7 +217,7 @@
                     </script>
                     <noscript>
                         <span style='color:red'>
-                            JavaScript support not detected.  This feature requires JavaScript support, and it currently only works on the Firefox web browser.
+                            JavaScript support not detected.  This feature requires JavaScript support, and it currently works only on the Firefox web browser.
                             Please view this page with the Firefox web browser, and with the JavaScript support enabled.
                         </span>
                     </noscript>
