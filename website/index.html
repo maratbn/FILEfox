@@ -142,11 +142,12 @@
                                 var divOutput = document.getElementById('output');
                                 divOutput.scrollTop = 0;
 
+                                // Figure out what the height of the viewport should be with the new file:
                                 totalHeight = text_fileDisplay.totalLines * CONST_heightLine + CONST_marginBottom;
 
+                                // Set the new viewport height:
                                 var divOutputScrolling = document.getElementById('output_scrolling');
                                 divOutputScrolling.style.height = totalHeight + 'px';
-                                
                             },
 
                             this.timer = function() {
