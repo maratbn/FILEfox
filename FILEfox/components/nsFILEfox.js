@@ -257,6 +257,33 @@ nsFILEfox.prototype = {
                                     return file_fox_text_file;
                                 },
 
+    _analyzeURL:                function(strURL) {
+                                    if (!strURL) return null;
+
+                                    var arrURLBreakdown = strURL.match(/^((\w+):\/\/(([\d\w-]+\.)+([\d\w-]+))(:\d+)?)\/.*$/);
+                                    var strServerAddress = arrURLBreakdown && arrURLBreakdown.length > 1 && arrURLBreakdown[1];
+                                    var strProtocol = arrURLBreakdown && arrURLBreakdown.length > 2 && arrURLBreakdown[2];
+                                    var strServer = arrURLBreakdown && arrURLBreakdown.length > 3 && arrURLBreakdown[3];
+                                    var strPort = arrURLBreakdown && arrURLBreakdown.length > 4 && arrURLBreakdown[4];
+
+                                    var arrURLBreakdownForFile = strURL.match(/^(file:\/\/\/(.+))$/);
+                                    strProtocol = strProtocol || arrURLBreakdownForFile && arrURLBreakdownForFile.length > 1 && 'file';
+                                    var strOriginAddress = strFilename = arrURLBreakdownForFile && arrURLBreakdownForFile.length > 0 && arrURLBreakdownForFile[1];
+                                    var strFilename = arrURLBreakdownForFile && arrURLBreakdownForFile.length > 1 && arrURLBreakdownForFile[2];
+
+                                    if (!strOriginAddress) strOriginAddress = strServerAddress;
+
+                                    return  {
+                                                protocol:       strProtocol,
+                                                server:         strServer,
+                                                port:           strPort,
+                                                origin_addr:    strOriginAddress,
+                                                server_addr:    strServerAddress,
+                                                filename:       strFilename,
+                                                url:            strURL
+                                            };
+                                },
+
     _generateConfirmationMsg:   function(window, strMessageToUser) {
                                     var arrMessageFromDOM = strMessageToUser && strMessageToUser.split(/\s/);
                                     var arrMessageFromDOMLines = [];
@@ -394,31 +421,7 @@ nsFILEfox.prototype = {
 
                                             var arrURL = strScope.match(/^.+@(.+)#?:.+$/);
                                             var strURL = arrURL && arrURL.length > 1 && arrURL[1];
-                                            if (strURL) {
-                                                var arrURLBreakdown = strURL.match(/^((\w+):\/\/(([\d\w-]+\.)+([\d\w-]+))(:\d+)?)\/.*$/);
-                                                var strServerAddress = arrURLBreakdown && arrURLBreakdown.length > 1 && arrURLBreakdown[1];
-                                                var strProtocol = arrURLBreakdown && arrURLBreakdown.length > 2 && arrURLBreakdown[2];
-                                                var strServer = arrURLBreakdown && arrURLBreakdown.length > 3 && arrURLBreakdown[3];
-                                                var strPort = arrURLBreakdown && arrURLBreakdown.length > 4 && arrURLBreakdown[4];
-
-                                                var arrURLBreakdownForFile = strURL.match(/^(file:\/\/\/(.+))$/);
-                                                strProtocol = strProtocol || arrURLBreakdownForFile && arrURLBreakdownForFile.length > 1 && 'file';
-                                                var strOriginAddress = strFilename = arrURLBreakdownForFile && arrURLBreakdownForFile.length > 0 && arrURLBreakdownForFile[1];
-                                                var strFilename = arrURLBreakdownForFile && arrURLBreakdownForFile.length > 1 && arrURLBreakdownForFile[2];
-
-                                                if (!strOriginAddress) strOriginAddress = strServerAddress;
-
-                                                var objInfo =   {
-                                                                    protocol:       strProtocol,
-                                                                    server:         strServer,
-                                                                    port:           strPort,
-                                                                    origin_addr:    strOriginAddress,
-                                                                    server_addr:    strServerAddress,
-                                                                    filename:       strFilename,
-                                                                    url:            strURL
-                                                                };
-                                                arrStackInfo.push(objInfo);
-                                            }
+                                            if (strURL) arrStackInfo.push(this._analyzeURL(strURL));
                                         }
                                         return arrStackInfo;
                                     }
