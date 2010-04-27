@@ -163,7 +163,7 @@ nsFILEfox.prototype = {
                                                                     null,
                                                                     '@mozilla.org/appshell/window-mediator;1',
                                                                     Components.interfaces.nsIWindowMediator);
-                                    var window = window_mediator && window_mediator.getMostRecentWindow(null);
+                                    var window = window_mediator && window_mediator.getMostRecentWindow('navigator:browser');
                                     if (!window) return null;
 
                                     if (!window.confirm(this._generateConfirmationMsg(window, strMessageToUser))) return null;
