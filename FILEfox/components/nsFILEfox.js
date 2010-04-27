@@ -268,7 +268,7 @@ nsFILEfox.prototype = {
 
                                     var arrURLBreakdownForFile = strURL.match(/^(file:\/\/\/(.+))$/);
                                     strProtocol = strProtocol || arrURLBreakdownForFile && arrURLBreakdownForFile.length > 1 && 'file';
-                                    var strOriginAddress = strFilename = arrURLBreakdownForFile && arrURLBreakdownForFile.length > 0 && arrURLBreakdownForFile[1];
+                                    var strOriginAddress = arrURLBreakdownForFile && arrURLBreakdownForFile.length > 0 && arrURLBreakdownForFile[1];
                                     var strFilename = arrURLBreakdownForFile && arrURLBreakdownForFile.length > 1 && arrURLBreakdownForFile[2];
 
                                     if (!strOriginAddress) strOriginAddress = strServerAddress;
