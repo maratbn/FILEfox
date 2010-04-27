@@ -166,7 +166,7 @@ nsFILEfox.prototype = {
                                     var window = window_mediator && window_mediator.getMostRecentWindow('navigator:browser');
                                     if (!window) return null;
 
-                                    if (!window.confirm(this._generateConfirmationMsg(window, strMessageToUser))) return null;
+                                    if (!window.confirm(this._generateConfirmationMsg(window, window_mediator, strMessageToUser))) return null;
 
                                     // Obtain the user's Desktop directory:
                                     var directory_service = this._obtainComponentService(
@@ -260,11 +260,14 @@ nsFILEfox.prototype = {
     _analyzeURL:                function(strURL) {
                                     if (!strURL) return null;
 
-                                    var arrURLBreakdown = strURL.match(/^((\w+):\/\/(([\d\w-]+\.)+([\d\w-]+))(:\d+)?)\/.*$/);
+                                    var arrURLBreakdown = strURL.match(/^((\w+):\/\/(([\d\w-]+\.)*([\d\w-]+))(:\d+)?)\/.*$/);
                                     var strServerAddress = arrURLBreakdown && arrURLBreakdown.length > 1 && arrURLBreakdown[1];
                                     var strProtocol = arrURLBreakdown && arrURLBreakdown.length > 2 && arrURLBreakdown[2];
                                     var strServer = arrURLBreakdown && arrURLBreakdown.length > 3 && arrURLBreakdown[3];
                                     var strPort = arrURLBreakdown && arrURLBreakdown.length > 4 && arrURLBreakdown[4];
+
+                                    if (strProtocol == 'http' && !strPort) strPort = 80;
+                                    if (strProtocol == 'https' && !strPort) strPort = 443;
 
                                     var arrURLBreakdownForFile = strURL.match(/^(file:\/\/\/(.+))$/);
                                     strProtocol = strProtocol || arrURLBreakdownForFile && arrURLBreakdownForFile.length > 1 && 'file';
@@ -284,7 +287,17 @@ nsFILEfox.prototype = {
                                             };
                                 },
 
-    _generateConfirmationMsg:   function(window, strMessageToUser) {
+    _determineIfDomainsDiffer:  function(objURLData1, objURLData2) {
+                                    if (!objURLData1 || !objURLData2) return true;                      // Non-existant addresses are considered different domains.
+                                    if (objURLData1.protocol != objURLData2.protocol) return true;      // Different protocols are considered different domains.
+                                    if (objURLData1.port != objURLData2.port) return true;              // Different port numbers are considered different domains.
+                                                                                                        // For now just comparing "origin addresses".
+                                    if (!objURLData1.strOriginAddress || !objURLData2.strOriginAddress || (objURLData1.strOriginAddress != objURLData2.strOriginAddress)) return true;
+
+                                    return false;
+                                },
+
+    _generateConfirmationMsg:   function(window, window_mediator, strMessageToUser) {
                                     var arrMessageFromDOM = strMessageToUser && strMessageToUser.split(/\s/);
                                     var arrMessageFromDOMLines = [];
                                     for (var i = 0; i < arrMessageFromDOM.length;) {
@@ -307,14 +320,34 @@ nsFILEfox.prototype = {
                                     var arrMessage = [];
                                     arrMessage.push(        "A JavaScript application embedded in this website is requesting to load an ASCII text file through the FILEfox Firefox extension.\r\n\r\n");
 
-                                    arrMessage.push(        "The JavaScript application is operating through a series of JavaScript routines downloaded from the following server(s) / origin(s):\r\n\r\n");
+                                    arrMessage.push(        "The JavaScript application is operating through a series of JavaScript routines downloaded from the following server(s) / domain(s):\r\n\r\n");
 
-                                    var arrServers = this._obtainListOrigins();
+                                    var totalScripts3rdParty = 0;
+
+                                    var arrServers = this._obtainListOrigins(window_mediator);
                                     for (var i = 0; i < arrServers.length; i++) {
-                                        arrMessage.push(    "   *  ", arrServers[i], "\r\n");
+                                        var objServer = arrServers[i];
+                                        arrMessage.push(    "   *  ", objServer.origin_addr);
+                                        if (objServer.isScript3rdParty) {
+                                            for (var j = objServer.origin_addr.length; j < 50; j++) {           // This makes the 3rd party script warnings are relatively aligned.
+                                                arrMessage.push(" ");
+                                            }
+                                            arrMessage.push(    "  <-- 3rd party script");
+
+                                            totalScripts3rdParty++;
+                                        }
+                                        arrMessage.push(    "\r\n");
                                     }
 
                                     arrMessage.push(        "\r\n");
+
+                                    if (totalScripts3rdParty > 0) {
+                                        arrMessage.push(    "Warning:  Detected at least " + totalScripts3rdParty + " 3-rd party script(s) involved in this file loading request.  ");
+                                        arrMessage.push(    "3-rd party JavaScript can be legitimate, but it is also known to be used by malicious servers for cross-site scripting (XSS) attacks.  ");
+                                        arrMessage.push(    "Such a malicious XSS \"attack\" could upload your private file to the malicious 3-rd party server.\r\n\r\n");
+                                    }
+
+                                    arrMessage.push(        "Do not continue with the file loading process if you do not trust any one of the server(s) / domain(s) listed above.\r\n\r\n");
 
                                     if (arrMessageFromDOMLines.length > 0) {
                                         arrMessage.push(    "Message from the JavaScript application:  ",
@@ -388,7 +421,7 @@ nsFILEfox.prototype = {
                                     }
                                 },
 
-    _obtainListOrigins:         function() {
+    _obtainListOrigins:         function(window_mediator) {
                                     var mapOrigins = {};
                                     var arrOrigins = [];
                                     var arrStackInfo = this._obtainStackInfo();
@@ -396,12 +429,29 @@ nsFILEfox.prototype = {
                                     var originLast = arrStackInfo.pop();
                                     var strOriginLast = originLast && originLast.origin_addr;
 
+                                    var objWebpageHierarchy = this._obtainWebpageHierarchy(window_mediator);
+
                                     for (var i = 0; i < arrStackInfo.length; i++) {
                                         var strOriginAddress = arrStackInfo[i].origin_addr;
                                         if (strOriginAddress == strOriginLast) continue;
 
                                         if (!mapOrigins[strOriginAddress]) {
-                                            arrOrigins.push(strOriginAddress);
+                                            var isScript3rdParty = false;
+                                            var strURLStack = arrStackInfo[i].url;
+                                            for (var j = 0; j < objWebpageHierarchy.scripts3rdParty.length; j++) {
+                                                var objScript3rdParty = objWebpageHierarchy.scripts3rdParty[j];
+                                                if (strURLStack == objScript3rdParty.url_data.url) {
+                                                    isScript3rdParty = true;
+                                                    break;
+                                                }
+                                            }
+
+                                            arrOrigins.push(
+                                                        {
+                                                            isScript3rdParty:   isScript3rdParty,
+                                                            origin_addr:        strOriginAddress
+                                                        });
+
                                             mapOrigins[strOriginAddress] = true;
                                         }
                                     }
@@ -425,6 +475,65 @@ nsFILEfox.prototype = {
                                         }
                                         return arrStackInfo;
                                     }
+                                },
+
+    _obtainWebpageHierarchy:    function(window_mediator) {
+                                    var arrWebpages = [];
+                                    var arrScripts3rdParty = [];
+
+                                    var that = this;
+
+                                    function _processFrames(windowWithFrames) {
+                                        if (!windowWithFrames.frames) return;
+
+                                        for (var i = 0; i < windowWithFrames.frames.length; i++) {
+                                            var windowFrame = windowWithFrames[i];
+                                            if (!windowFrame.document) continue;
+
+                                            var strURL = windowFrame.document.documentURI;
+                                            if (strURL == 'about:blank') continue;
+
+                                            var objURLDataWP = that._analyzeURL(strURL);
+                                            if (objURLDataWP.protocol == 'chrome') continue;
+
+                                            var arrScriptSRCs = [];
+                                            var arrScripts = windowFrame.document.getElementsByTagName('script');
+                                            if (arrScripts) {
+                                                for (var j = 0; j < arrScripts.length; j++) {
+                                                    var elemScript = arrScripts[j];
+                                                    var attrSRC = elemScript.attributes && elemScript.attributes.getNamedItem('src');
+                                                    var strSRC = attrSRC && attrSRC.value;
+                                                    if (strSRC) {
+                                                        var objURLDataScript = that._analyzeURL(strSRC);
+                                                        var areDomainsDifferent = that._determineIfDomainsDiffer(objURLDataWP, objURLDataScript);
+                                                        var objScript = {
+                                                                            isScript3rdParty:   areDomainsDifferent,
+                                                                            url_data:           objURLDataScript
+                                                                        };
+                                                        arrScriptSRCs.push(objScript);
+                                                        if (areDomainsDifferent) arrScripts3rdParty.push(objScript);
+                                                    }
+                                                }
+                                            }
+                                            arrWebpages.push(
+                                                            {
+                                                                url_data:   objURLDataWP,
+                                                                scripts:    arrScriptSRCs
+                                                            });
+
+                                            _processFrames(windowFrame);
+                                        }
+                                    }
+
+                                    var enumeration = window_mediator.getEnumerator('navigator:browser');
+                                    while (enumeration.hasMoreElements()) {
+                                        _processFrames(enumeration.getNext());
+                                    }
+
+                                    return  {
+                                                scripts3rdParty:    arrScripts3rdParty,
+                                                webpages:           arrWebpages
+                                            };
                                 }
 };
 
