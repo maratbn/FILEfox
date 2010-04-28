@@ -187,6 +187,8 @@
 
                         function doLoadFile() {
                             var text_file = window.nsFILEfox.requestLoadASCIIFile(
+                                                    'upload_policy_file_never',
+                                                    'upload_policy_derived_data_never',
                                                     "FILEfox demo site",
                                                     "This is the FILEfox demonstration website.  Specify an ASCII text file with test data to experience the file loading process via the FILEfox extension.");
                             if (!text_file) {
@@ -271,6 +273,64 @@
                                             <p>
                                                 Parameters:
                                                 <ul>
+                                                    <li>
+                                                        <h6 class='code'>String strUPFile</h6>
+                                                        <p class='item_desc'>
+                                                            A string identifying the requesting application's upload policy
+                                                            for data derived from file contents.  Only valid upload policies
+                                                            are accepted.  Valid upload policies for derived data are:
+                                                            <ul>
+                                                                <li>
+                                                                    'upload_policy_derived_data_never'
+                                                                    <p>
+                                                                        Derived data is never uploaded.
+                                                                    </p>
+                                                                </li>
+                                                                <li>
+                                                                    'upload_policy_derived_data_always'
+                                                                    <p>
+                                                                        Derived data is always uploaded.
+                                                                    </p>
+                                                                </li>
+                                                                <li>
+                                                                    'upload_policy_derived_data_asks_later'
+                                                                    <p>
+                                                                        Application will later ask the
+                                                                        user for permission to upload.
+                                                                    </p>
+                                                                </li>
+                                                            </ul>
+                                                        </p>
+                                                    </li>
+                                                    <li>
+                                                        <h6 class='code'>String strUPDerivedData</h6>
+                                                        <p class='item_desc'>
+                                                            A string identifying the requesting application's upload policy
+                                                            for data derived from file contents.  Only valid upload policies
+                                                            are accepted.  Valid upload policies for derived data are:
+                                                            <ul>
+                                                                <li>
+                                                                    'upload_policy_derived_data_never'
+                                                                    <p>
+                                                                        Derived data is never uploaded.
+                                                                    </p>
+                                                                </li>
+                                                                <li>
+                                                                    'upload_policy_derived_data_always'
+                                                                    <p>
+                                                                        Derived data is always uploaded.
+                                                                    </p>
+                                                                </li>
+                                                                <li>
+                                                                    'upload_policy_derived_data_asks_later'
+                                                                    <p>
+                                                                        Application will later ask the
+                                                                        user for permission to upload.
+                                                                    </p>
+                                                                </li>
+                                                            </ul>
+                                                        </p>
+                                                    </li>
                                                     <li>
                                                         <h6 class='code'>String strApplicationName</h6>
                                                         <p class='item_desc'>

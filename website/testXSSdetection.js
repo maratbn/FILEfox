@@ -2,6 +2,8 @@
 
 function doLoadFileViaXSS() {
     var text_file = window.nsFILEfox.requestLoadASCIIFile(
+                                        'upload_policy_file_never',
+                                        'upload_policy_derived_data_never',
                                         "FILEfox demo site",
                                         [
                                             "This is the FILEfox demonstration website.  ",

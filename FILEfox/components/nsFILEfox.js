@@ -157,15 +157,33 @@ nsFILEfox.prototype = {
      *  The returned data object should be assigned to a private local variable inside the calling function and later
      *  accessed via closure to prevent exposing it to other scripts on the page.
      *
-     *  @param  strApplicationName  String                  A short textual name identifying the JavaScript
-     *                                                      application requesting the file.  The application will be
-     *                                                      identified to the user by this name.
+     *  @param  strUPFile           String          A string identifying the requesting application's upload policy
+     *                                              for file contents.  Only valid upload policies are accepted.
+     *                                              Valid upload policies for file contents are:
      *
-     *  @param  strMessageToUser    String                  A longer textual request message providing file loading
-     *                                                      instructions to the user, and explaining why the
-     *                                                      JavaScript application is requesting the file.
+     *                                              'upload_policy_file_never'      File contents are never uploaded.
+     *                                              'upload_policy_file_always'     File contents are always uploaded.
+     *                                              'upload_policy_file_asks_later' Application will later ask the
+     *                                                                              user for permission to upload.
+     *
+     *  @param  strUPDerivedData    String          A string identifying the requesting application's upload policy
+     *                                              for data derived from file contents.  Only valid upload policies
+     *                                              are accepted.  Valid upload policies for derived data are:
+     *
+     *                                              'upload_policy_derived_data_never'      Derived data is never uploaded.
+     *                                              'upload_policy_derived_data_always'     Derived data is always uploaded.
+     *                                              'upload_policy_derived_data_asks_later' Application will later ask the
+     *                                                                                      user for permission to upload.
+     *
+     *  @param  strApplicationName  String          A short textual name identifying the JavaScript
+     *                                              application requesting the file.  The application will be
+     *                                              identified to the user by this name.
+     *
+     *  @param  strMessageToUser    String          A longer textual request message providing file loading
+     *                                              instructions to the user, and explaining why the
+     *                                              JavaScript application is requesting the file.
      */
-    requestLoadASCIIFile:       function(strApplicationName, strMessageToUser) {
+    requestLoadASCIIFile:       function(strUPFile, strUPDerivedData, strApplicationName, strMessageToUser) {
                                     // Get a reference to the DOM window to be able to communicate with the user:
                                     var window_mediator = this._obtainComponentService(
                                                                     null,
@@ -174,7 +192,12 @@ nsFILEfox.prototype = {
                                     var window = window_mediator && window_mediator.getMostRecentWindow('navigator:browser');
                                     if (!window) return null;
 
-                                    if (!window.confirm(this._generateConfirmationMsg(window, window_mediator, strApplicationName, strMessageToUser))) return null;
+                                    if (!this._doConfirmationMsg(   window,
+                                                                    window_mediator,
+                                                                    strUPFile,
+                                                                    strUPDerivedData,
+                                                                    strApplicationName,
+                                                                    strMessageToUser)) return null;
 
                                     // Obtain the user's Desktop directory:
                                     var directory_service = this._obtainComponentService(
@@ -305,7 +328,33 @@ nsFILEfox.prototype = {
                                     return false;
                                 },
 
-    _generateConfirmationMsg:   function(window, window_mediator, strApplicationName, strMessageToUser) {
+    _doConfirmationMsg:         function(window, window_mediator, strUPFile, strUPDerivedData, strApplicationName, strMessageToUser) {
+                                    var strUPFileDesc = null, strUPDerivedDataDesc = null;
+
+                                    switch (strUPFile) {
+                                        case 'upload_policy_file_never':
+                                            strUPFileDesc = "File contents are never uploaded.";
+                                            break;
+                                        case 'upload_policy_file_always':
+                                            strUPFileDesc = "File contents are always uploaded.";
+                                            break;
+                                        case 'upload_policy_file_asks_later':
+                                            strUPFileDesc = "Application will later ask the user for permission to upload file contents.";
+                                            break;
+                                    }
+
+                                    switch (strUPDerivedData) {
+                                        case 'upload_policy_derived_data_never':
+                                            strUPDerivedDataDesc = "Derived data is never uploaded.";
+                                            break;
+                                        case 'upload_policy_derived_data_always':
+                                            strUPDerivedDataDesc = "Derived data is always uploaded.";
+                                            break;
+                                        case 'upload_policy_derived_data_asks_later':
+                                            strUPDerivedDataDesc = "Application will later ask the user for permission to upload derived data.";
+                                            break;
+                                    }
+
                                     var arrMessageFromDOM = strMessageToUser && strMessageToUser.split(/\s/);
                                     var arrMessageFromDOMLines = [];
                                     for (var i = 0; i < arrMessageFromDOM.length;) {
@@ -327,6 +376,36 @@ nsFILEfox.prototype = {
 
                                     var arrMessage = [];
                                     arrMessage.push(        "A website-embedded JavaScript application identifying itself as '", strApplicationName, "' is requesting to load an ASCII text file through the FILEfox Firefox extension.\r\n\r\n");
+
+                                    if (strUPFileDesc) {
+                                        arrMessage.push(    "Application-advertised file contents upload policy for this request:  ", strUPFileDesc, "\r\n");
+                                    } else {
+                                        arrMessage.push(    "The application did not specify a valid upload policy for file contents.  Valid upload policies for file contents are:\r\n",
+                                                            "    *  'upload_policy_file_never'\r\n",
+                                                            "       File contents are never uploaded.\r\n",
+                                                            "    *  'upload_policy_file_always'\r\n",
+                                                            "       File contents are always uploaded.\r\n",
+                                                            "    *  'upload_policy_file_asks_later'\r\n",
+                                                            "       Application will later ask the user for permission to upload.\r\n\r\n");
+                                    }
+                                    if (strUPDerivedDataDesc) {
+                                        arrMessage.push(    "Application-advertised derived data upload policy for this request:  ", strUPDerivedDataDesc, "\r\n");
+                                    } else {
+                                        arrMessage.push(    "The application did not specify a valid upload policy for derived data.  Valid upload policies for derived data are:\r\n",
+                                                            "    *  'upload_policy_derived_data_never'\r\n",
+                                                            "       Derived data is never uploaded.\r\n",
+                                                            "    *  'upload_policy_derived_data_always'\r\n",
+                                                            "       Derived data is always uploaded.\r\n",
+                                                            "    *  'upload_policy_derived_data_asks_later'\r\n",
+                                                            "       Application will later ask the user for permission to upload.\r\n");
+                                    }
+                                    arrMessage.push(        "\r\n");
+
+                                    if (!strUPFileDesc || !strUPDerivedDataDesc) {
+                                        arrMessage.push(    "This file request has been aborted because the requesting JavaScript application has not specified valid upload policie(s) supported in this FILEfox extension version ", this.getVersion(), ".\r\n\r\n");
+                                    }
+
+                                    arrMessage.push(        "Warning:  Malicious applications may not honor their upload policies.\r\n\r\n");
 
                                     arrMessage.push(        "The JavaScript application is operating through a series of JavaScript routines downloaded from the following server(s) / domain(s):\r\n\r\n");
 
@@ -355,6 +434,11 @@ nsFILEfox.prototype = {
                                         arrMessage.push(    "Such a malicious XSS \"attack\" could upload your private file to the malicious 3-rd party server.\r\n\r\n");
                                     }
 
+                                    if (!strUPFileDesc || !strUPDerivedDataDesc) {
+                                        window.alert(arrMessage.join(""));
+                                        return false;
+                                    }
+
                                     arrMessage.push(        "Do not continue with the file loading process if you do not trust any one of the server(s) / domain(s) listed above.\r\n\r\n");
 
                                     if (arrMessageFromDOMLines.length > 0) {
@@ -375,7 +459,7 @@ nsFILEfox.prototype = {
                                                             "\r\n\r\n",
                                                             "Are you sure you want to continue to the file selection dialog box?");
 
-                                    return arrMessage.join("");
+                                    return window.confirm(arrMessage.join(""));
                                 },
 
     _obtainComponentClass:      function(window, strComponentContractID) {
