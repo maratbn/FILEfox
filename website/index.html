@@ -56,6 +56,12 @@
             .FILEfox_support .documentation .section_content li {
                 list-style-type:                none;
             }
+            .FILEfox_support .example .code {
+                border:                         1px black solid;
+                font-size:                      8pt;
+                padding:                        10px;
+                overflow:                       auto;
+            }
             .FILEfox_support .disclaimer {
                 /*
                 width:                          80%;
@@ -414,6 +420,44 @@
                             </ul>
                         </p>
                     </p>
+                </div>
+            </li>
+            <li class='example'>
+                <h3>FILEfox API Example:</h3>
+                <div class='section_content'>
+                    <h4> JavaScript code</h4>
+<pre class='code'>
+    function loadFileWithFILEfox() {
+        // First, check if FILEfox is installed.
+        if (!window.FILEfox) {
+            alert("Sorry, you don't have the FILEfox extension installed.");
+            return;
+        }
+
+        // OK, FILEfox version can be retrieved with the 'getVersion()' call.
+        alert("BTW, you have FILEfox extension version " + FILEfox.getVersion());
+
+        // Request a file through FILEfox:
+        // (Keeping the returned data object in a private local variable so that other scripts on the page cannot read it.)
+        var text_file = nsFILEfox.requestLoadASCIIFile(
+                                'upload_policy_file_never',             // Specifying a valid file upload policy
+                                                                        // to avoid an error message!
+                                'upload_policy_derived_data_never',     // Specifying a valid the derived data upload policy
+                                                                        // to avoid an error message!
+                                "Corp XYZ JavaScript App",              // Company / JavaScript app name
+                                                                        // Additional message to the user
+                                "Please specify an XYZ data file for analysis.");
+        if (!text_file) {
+            alert("Could not get the file.  The user either canceled or there was an error");
+            return;
+        }
+
+        alert("Got a text file with " + text_file.getTotalLines() + " total lines.");
+        if (text_file.getTotalLines() > 0) {
+            alert("The first line says:  '" + text_file.getLine(0) + "'");
+        }
+    }
+</pre>
                 </div>
             </li>
             <li class='disclaimer'>
