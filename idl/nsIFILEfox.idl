@@ -89,7 +89,7 @@ interface nsIFILEfox : nsISupports {
     /**
      *  Causes the FILEfox extension to request from the user to manually select an ASCII text file to load.  Upon
      *  user approval FILEfox will initiate a Mozilla-internal synchroneous file loading routine via XPCOM, and then
-     *  return the file contents in a data object corresponding to the 'nsIFILEfoxTextFileRead' contract, or a falsy
+     *  return the file contents in a data object corresponding to the 'nsIFILEfoxTextFileRead' interface, or a falsy
      *  value on failure.
      *
      *  The returned data object should be assigned to a private local variable inside the calling function and later
