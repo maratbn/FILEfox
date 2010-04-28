@@ -340,7 +340,7 @@ nsFILEfox.prototype = {
                                             for (var j = objServer.origin_addr.length; j < 50; j++) {           // This makes the 3rd party script warnings are relatively aligned.
                                                 arrMessage.push(" ");
                                             }
-                                            arrMessage.push(    "  <-- 3rd party script");
+                                            arrMessage.push(    "  <-- 3-rd party script");
 
                                             totalScripts3rdParty++;
                                         }
