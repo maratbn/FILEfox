@@ -10,7 +10,7 @@ function doLoadFileViaXSS() {
                                             "Such a malicious XSS \"attack\" could upload your private file to the malicious 3-rd party server."
                                         ].join(""));
     if (!text_file) {
-        alert("Demonstration website:  Could not get a file via the FILEfox Firefox extension.  The user has either canceled, there was an error in some part of the loading process.");
+        alert("Demonstration website:  Could not get a file via the FILEfox Firefox extension.  The user has either canceled, or there was an error in some part of the loading process.");
         return;
     }
 
