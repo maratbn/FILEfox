@@ -149,15 +149,23 @@ nsFILEfox.prototype = {
                                 },
 
     /**
-     *  Causes the FILEfox extension to request from the user to manually select an ASCII text file to load.  The
-     *  function will then initiate a synchroneous file loading process, and at the conclusion return an object
-     *  corresponding to the 'nsIFILEfoxTextFile' contract with the file contents, or a falsy value on failure.
+     *  Causes the FILEfox extension to request from the user to manually select an ASCII text file to load.  Upon
+     *  user approval FILEfox will initiate a Mozilla-internal synchroneous file loading routine via XPCOM, and then
+     *  return the file contents in a data object corresponding to the 'nsIFILEfoxTextFileRead' interface, or a falsy
+     *  value on failure.
      *
-     *  @param  strMessageToUser    String                  A textual request message to display to the user, possibly
-     *                                                      explaining why the application is requesting an ASCII text
-     *                                                      file.
+     *  The returned data object should be assigned to a private local variable inside the calling function and later
+     *  accessed via closure to prevent exposing it to other scripts on the page.
+     *
+     *  @param  strApplicationName  String                  A short textual name identifying the JavaScript
+     *                                                      application requesting the file.  The application will be
+     *                                                      identified to the user by this name.
+     *
+     *  @param  strMessageToUser    String                  A longer textual request message providing file loading
+     *                                                      instructions to the user, and explaining why the
+     *                                                      JavaScript application is requesting the file.
      */
-    requestLoadASCIIFile:       function(strMessageToUser) {
+    requestLoadASCIIFile:       function(strApplicationName, strMessageToUser) {
                                     // Get a reference to the DOM window to be able to communicate with the user:
                                     var window_mediator = this._obtainComponentService(
                                                                     null,
@@ -166,7 +174,7 @@ nsFILEfox.prototype = {
                                     var window = window_mediator && window_mediator.getMostRecentWindow('navigator:browser');
                                     if (!window) return null;
 
-                                    if (!window.confirm(this._generateConfirmationMsg(window, window_mediator, strMessageToUser))) return null;
+                                    if (!window.confirm(this._generateConfirmationMsg(window, window_mediator, strApplicationName, strMessageToUser))) return null;
 
                                     // Obtain the user's Desktop directory:
                                     var directory_service = this._obtainComponentService(
@@ -297,7 +305,7 @@ nsFILEfox.prototype = {
                                     return false;
                                 },
 
-    _generateConfirmationMsg:   function(window, window_mediator, strMessageToUser) {
+    _generateConfirmationMsg:   function(window, window_mediator, strApplicationName, strMessageToUser) {
                                     var arrMessageFromDOM = strMessageToUser && strMessageToUser.split(/\s/);
                                     var arrMessageFromDOMLines = [];
                                     for (var i = 0; i < arrMessageFromDOM.length;) {
@@ -318,7 +326,7 @@ nsFILEfox.prototype = {
                                     }
 
                                     var arrMessage = [];
-                                    arrMessage.push(        "A JavaScript application embedded in this website is requesting to load an ASCII text file through the FILEfox Firefox extension.\r\n\r\n");
+                                    arrMessage.push(        "A website-embedded JavaScript application identifying itself as '", strApplicationName, "' is requesting to load an ASCII text file through the FILEfox Firefox extension.\r\n\r\n");
 
                                     arrMessage.push(        "The JavaScript application is operating through a series of JavaScript routines downloaded from the following server(s) / domain(s):\r\n\r\n");
 

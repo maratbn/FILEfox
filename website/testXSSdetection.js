@@ -2,6 +2,7 @@
 
 function doLoadFileViaXSS() {
     var text_file = window.nsFILEfox.requestLoadASCIIFile(
+                                        "FILEfox demo site",
                                         [
                                             "This is the FILEfox demonstration website.  ",
                                             "FILEfox has a security feature that warns the user when it detects 3-rd party JavaScript -- that is JavaScript coming from some domain other than the main webpage domain.  ",

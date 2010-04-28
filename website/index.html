@@ -186,7 +186,9 @@
                         var text_file_view = new TextFileView();
 
                         function doLoadFile() {
-                            var text_file = window.nsFILEfox.requestLoadASCIIFile("This is the FILEfox demonstration website.  Specify an ASCII text file with test data to experience the file loading process via the FILEfox extension.");
+                            var text_file = window.nsFILEfox.requestLoadASCIIFile(
+                                                    "FILEfox demo site",
+                                                    "This is the FILEfox demonstration website.  Specify an ASCII text file with test data to experience the file loading process via the FILEfox extension.");
                             if (!text_file) {
                                 alert("Demonstration website:  Could not get a file via the FILEfox Firefox extension.  The user has either canceled, or there was an error in some part of the loading process.");
                                 return;
@@ -259,9 +261,10 @@
                                     <h5 class='code'>nsIFILEfoxTextFileRead requestLoadASCIIFile<span class='code_op'>(</span>String strMessageToUser<span class='code_op'>)</span></h5>
                                     <div class='item_desc'>
                                         <p>
-                                            Causes the FILEfox extension to request from the user to manually select an ASCII text file to load.  The
-                                            function will then initiate a synchroneous file loading process, and at the conclusion return a data object
-                                            corresponding to the '<span class='code'>nsIFILEfoxTextFileRead</span>' contract with the file contents, or a falsy value on failure.
+                                            Causes the FILEfox extension to request from the user to manually select an ASCII text file to load.  Upon
+                                            user approval FILEfox will initiate a Mozilla-internal synchroneous file loading routine via XPCOM, and then
+                                            return the file contents in a data object corresponding to the '<span class='code'>nsIFILEfoxTextFileRead</span>' interface, or a falsy
+                                            value on failure.
                                             <br><br>
                                             The returned data object should be assigned to a private local variable inside the calling function and later
                                             accessed via closure to prevent exposing it to other scripts on the page.
@@ -269,10 +272,19 @@
                                                 Parameters:
                                                 <ul>
                                                     <li>
+                                                        <h6 class='code'>String strApplicationName</h6>
+                                                        <p class='item_desc'>
+                                                            A short textual name identifying the JavaScript
+                                                            application requesting the file.  The application will be
+                                                            identified to the user by this name.
+                                                        </p>
+                                                    </li>
+                                                    <li>
                                                         <h6 class='code'>String strMessageToUser</h6>
                                                         <p class='item_desc'>
-                                                            A textual request message to display to the user, possibly explaining why
-                                                            the application is requesting an ASCII text file.
+                                                            A longer textual request message providing file loading
+                                                            instructions to the user, and explaining why the
+                                                            JavaScript application is requesting the file.
                                                         </p>
                                                     </li>
                                                 </ul>
