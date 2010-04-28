@@ -95,13 +95,35 @@ interface nsIFILEfox : nsISupports {
      *  The returned data object should be assigned to a private local variable inside the calling function and later
      *  accessed via closure to prevent exposing it to other scripts on the page.
      *
-     *  @param  strApplicationName  String                  A short textual name identifying the JavaScript
-     *                                                      application requesting the file.  The application will be
-     *                                                      identified to the user by this name.
+     *  @param  strUPFile           String          A string identifying the requesting application's upload policy
+     *                                              for file contents.  Only valid upload policies are accepted.
+     *                                              Valid upload policies for file contents are:
      *
-     *  @param  strMessageToUser    String                  A longer textual request message providing file loading
-     *                                                      instructions to the user, and explaining why the
-     *                                                      JavaScript application is requesting the file.
+     *                                              'upload_policy_file_never'      File contents are never uploaded.
+     *                                              'upload_policy_file_always'     File contents are always uploaded.
+     *                                              'upload_policy_file_asks_later' Application will later ask the
+     *                                                                              user for permission to upload.
+     *
+     *  @param  strUPDerivedData    String          A string identifying the requesting application's upload policy
+     *                                              for data derived from file contents.  Only valid upload policies
+     *                                              are accepted.  Valid upload policies for derived data are:
+     *
+     *                                              'upload_policy_derived_data_never'      Derived data is never uploaded.
+     *                                              'upload_policy_derived_data_always'     Derived data is always uploaded.
+     *                                              'upload_policy_derived_data_asks_later' Application will later ask the
+     *                                                                                      user for permission to upload.
+     *
+     *  @param  strApplicationName  String          A short textual name identifying the JavaScript
+     *                                              application requesting the file.  The application will be
+     *                                              identified to the user by this name.
+     *
+     *  @param  strMessageToUser    String          A longer textual request message providing file loading
+     *                                              instructions to the user, and explaining why the
+     *                                              JavaScript application is requesting the file.
      */
-    nsIFILEfoxTextFileRead requestLoadASCIIFile(in string strApplicationName, in string strMessageToUser);
+    nsIFILEfoxTextFileRead requestLoadASCIIFile(
+                                in string strUploadPolicyForFile,
+                                in string strUploadPolicyForDerivedData,
+                                in string strApplicationName,
+                                in string strMessageToUser);
 };
