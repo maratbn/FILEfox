@@ -87,16 +87,21 @@ interface nsIFILEfox : nsISupports {
     string getVersion();
 
     /**
-     *  Causes the FILEfox extension to request from the user to manually select an ASCII text file to load.  The
-     *  function will then initiate a synchroneous file loading process, and at the conclusion return a data object
-     *  corresponding to the 'nsIFILEfoxTextFileRead' contract with the file contents, or a falsy value on failure.
+     *  Causes the FILEfox extension to request from the user to manually select an ASCII text file to load.  Upon
+     *  user approval FILEfox will initiate a Mozilla-internal synchroneous file loading routine via XPCOM, and then
+     *  return the file contents in a data object corresponding to the 'nsIFILEfoxTextFileRead' contract, or a falsy
+     *  value on failure.
      *
      *  The returned data object should be assigned to a private local variable inside the calling function and later
      *  accessed via closure to prevent exposing it to other scripts on the page.
      *
-     *  @param  strMessageToUser    String                  A textual request message to display to the user, possibly
-     *                                                      explaining why the application is requesting an ASCII text
-     *                                                      file.
+     *  @param  strApplicationName  String                  A short textual name identifying the JavaScript
+     *                                                      application requesting the file.  The application will be
+     *                                                      identified to the user by this name.
+     *
+     *  @param  strMessageToUser    String                  A longer textual request message providing file loading
+     *                                                      instructions to the user, and explaining why the
+     *                                                      JavaScript application is requesting the file.
      */
-    nsIFILEfoxTextFileRead requestLoadASCIIFile(in string strMessageToUser);
+    nsIFILEfoxTextFileRead requestLoadASCIIFile(in string strApplicationName, in string strMessageToUser);
 };
