@@ -488,6 +488,8 @@ nsFILEfox.prototype = {
 
                                         for (var i = 0; i < windowWithFrames.frames.length; i++) {
                                             var windowFrame = windowWithFrames[i];
+                                            _processFrames(windowFrame);
+
                                             if (!windowFrame.document) continue;
 
                                             var strURL = windowFrame.document.documentURI;
@@ -520,8 +522,6 @@ nsFILEfox.prototype = {
                                                                 url_data:   objURLDataWP,
                                                                 scripts:    arrScriptSRCs
                                                             });
-
-                                            _processFrames(windowFrame);
                                         }
                                     }
 
