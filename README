@@ -1,26 +1,30 @@
 FILEfox version 0.2.1.2010-04-28  by Marat Nepomnyashy  maratbn@gmail  www.maratbn.com/FILEfox/
 
-FILEfox is an open-source add-on / extension module for the popular open-source Mozilla Firefox web browser.
+FILEfox is an open-source add-on / extension module for the popular open-source Mozilla Firefox web
+browser.
 
-FILEfox is a local file access proxy for JavaScript-based web applications running on Firefox.
-It gives these applications a civilized way to request manual user permission to load specific
-local files for local analysis, in a fashion similar to the HTML form file upload, but the
-data does not have to be uploaded to the web server.  This eliminates the age-old requirement
-that the user data resides on remote server(s), enabling better privacy, and further opening
-the door to desktop computing via web applications.
+FILEfox is a local file access proxy for JavaScript-based web applications running on Firefox.  It
+gives these applications a civilized way to request manual user permission to load specific local
+files for local analysis, in a fashion similar to the HTML form file upload, but the data does not
+have to be uploaded to the web server.  This eliminates the age-old requirement that the user data
+resides on remote server(s), enabling better privacy, and further opening the door to desktop
+computing via web applications.
 
-FILEfox remains dormant until a web application requests permission to load a file.
-The request is relayed to the user, who can approve or deny.
-FILEfox notifies the user when the request is coming through 3-rd party JavaScript.
-Permission can be granted to load only one file at a time, and each file is loaded only at the time the permission is granted.
+FILEfox remains dormant until a web application requests permission to load a file.  The request is
+relayed to the user, who can approve or deny.  FILEfox notifies the user when the request is coming
+through 3-rd party JavaScript.  Permission can be granted to load only one file at a time, and each
+file is loaded only at the time the permission is granted.
 
-For more information on how to utilize the FILEfox extension in your web application, see the support website.
+For more information on how to utilize the FILEfox extension in your web application, see the
+support website.
 
 WARNING:  MALICIOUS WEB APPLICATIONS MAY UPLOAD ANY DATA AVAILABLE TO MALICIOUS SERVERS.
 
-USE THIS EXTENSION ONLY WITH THE WEBSITES YOU TRUST.
-DO NOT USE THIS EXTENSION TO OPEN FILES FOR PHISHING WEBSITES.
-DO NOT USE THIS EXTENSION TO OPEN FILES FOR WEBSITES THAT ALLOW ARBITRARY 3-RD PARTY JAVASCRIPT APPLICATIONS (SUCH AS FACEBOOK).
-DO NOT USE THIS EXTENSION TO OPEN FILES CONTAINING DATA SUCH AS AUTHENTICATION, OPERATING SYSTEM CONFIGURATION, OR FINANCIAL INFORMATION.
+* USE THIS EXTENSION ONLY WITH THE WEBSITES YOU TRUST.
+* DO NOT USE THIS EXTENSION TO OPEN FILES FOR PHISHING WEBSITES.
+* DO NOT USE THIS EXTENSION TO OPEN FILES FOR WEBSITES THAT ALLOW ARBITRARY 3-RD PARTY JAVASCRIPT
+  APPLICATIONS (SUCH AS FACEBOOK).
+* DO NOT USE THIS EXTENSION TO OPEN FILES CONTAINING DATA SUCH AS AUTHENTICATION, OPERATING SYSTEM
+* CONFIGURATION, OR FINANCIAL INFORMATION.
 
 ** RECOMMENDED FOR EXPERIENCED USERS ONLY **
