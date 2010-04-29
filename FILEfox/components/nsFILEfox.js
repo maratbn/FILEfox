@@ -405,7 +405,7 @@ nsFILEfox.prototype = {
                                         arrMessage.push(    "This file request has been aborted because the requesting JavaScript application has not specified valid upload policie(s) supported in this FILEfox extension version ", this.getVersion(), ".\r\n\r\n");
                                     }
 
-                                    arrMessage.push(        "Warning:  Malicious applications may not honor their upload policies.\r\n\r\n");
+                                    arrMessage.push(        "Warning:  Malicious applications may not honor advertised upload policies.\r\n\r\n");
 
                                     arrMessage.push(        "The JavaScript application is operating through a series of JavaScript routines downloaded from the following server(s) / domain(s):\r\n\r\n");
 
