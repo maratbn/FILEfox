@@ -38,7 +38,7 @@
 
   <Description about="urn:mozilla:install-manifest">
     <em:id>FILEfox@maratbn.com</em:id>
-    <em:version>0.1</em:version>
+    <em:version>0.2.1.2010-04-28</em:version>
     <em:type>2</em:type>
    
     <!-- Target Application this extension can install into, 
