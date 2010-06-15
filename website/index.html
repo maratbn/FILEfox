@@ -432,13 +432,13 @@
 <pre class='code'>
     function loadFileWithFILEfox() {
         // First, check if FILEfox is installed.
-        if (!window.FILEfox) {
+        if (!window.nsFILEfox) {
             alert("Sorry, you don't have the FILEfox extension installed.");
             return;
         }
 
         // OK, FILEfox version can be retrieved with the 'getVersion()' call.
-        alert("BTW, you have FILEfox extension version " + FILEfox.getVersion());
+        alert("BTW, you have FILEfox extension version " + nsFILEfox.getVersion());
 
         // Request a file through FILEfox:
         // (Keeping the returned data object in a private local variable so that other scripts on the page cannot read it.)
