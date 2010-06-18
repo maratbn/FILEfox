@@ -152,14 +152,14 @@ nsFILEfox.prototype = {
     /**
      *  Returns 'true' if the version of the currently installed FILEfox extension is at least the version specified.
      *
-     *  @param  strVersion          String          String identifying the version to test for in x.y.z format.
+     *  @param  strVersionTest      String          String identifying the version to test for in x.y.z format.
      */
-    isVersionAtLeast:           function(strVersion) {
-                                    if (!strVersion) return false;
+    isVersionAtLeast:           function(strVersionTest) {
+                                    if (!strVersionTest) return false;
 
                                     var strVersionCurrent = this.getVersion();
 
-                                    var arrVersionTest      = strVersion.split('.');
+                                    var arrVersionTest      = strVersionTest.split('.');
                                     var arrVersionCurrent   = strVersionCurrent.split('.');
 
                                     var lengthMin = Math.min(arrVersionTest.length, arrVersionCurrent.length);
