@@ -150,6 +150,32 @@ nsFILEfox.prototype = {
                                 },
 
     /**
+     *  Returns 'true' if the version of the currently installed FILEfox extension is at least the version specified.
+     *
+     *  @param  strVersion          String          String identifying the version to test for in x.y.z format.
+     */
+    isVersionAtLeast:           function(strVersion) {
+                                    if (!strVersion) return false;
+
+                                    var strVersionCurrent = this.getVersion();
+
+                                    var arrVersionTest      = strVersion.split('.');
+                                    var arrVersionCurrent   = strVersionCurrent.split('.');
+
+                                    var lengthMin = Math.min(arrVersionTest.length, arrVersionCurrent.length);
+                                    for (var i = 0; i < lengthMin; i++) {
+                                        var fragVersionTest = parseInt(arrVersionTest[i]);
+                                        if (isNaN(fragVersionTest)) return false;
+
+                                        var fragVersionCurrent = parseInt(arrVersionCurrent[i]);
+                                        if (fragVersionTest < fragVersionCurrent) return true;
+                                        if (fragVersionCurrent < fragVersionTest) return false;
+                                    }
+
+                                    return (arrVersionTest.length <= arrVersionCurrent.length);
+                                },
+
+    /**
      *  Causes the FILEfox extension to request from the user to manually select an ASCII text file to load.  Upon
      *  user approval FILEfox will initiate a Mozilla-internal synchroneous file loading routine via XPCOM, and then
      *  return the file contents in a data object corresponding to the 'nsIFILEfoxTextFileRead' interface, or a falsy
