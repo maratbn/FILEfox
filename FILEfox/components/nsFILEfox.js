@@ -101,6 +101,8 @@ nsFILEfoxTextFileReadOut.prototype = {
      *
      *  @param  indexToken          Number                  0-based index of the token on the line.
      *  @param  indexLine           Number                  0-based index of the line.
+     *
+     *  Note that the token index is specified before the line index.
      */
     getTokenOnLine:             function(indexToken, indexLine) {
                                     this._insureTokenLineExists(indexLine);
