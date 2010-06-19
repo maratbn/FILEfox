@@ -90,11 +90,46 @@ nsFILEfoxTextFileReadOut.prototype = {
                                     return this._arrLines && this._arrLines[indexLine];
                                 },
 
+    getLineStripped:            function(indexLine) {
+                                    var strLine = this.getLine(indexLine);
+                                    arrBreakdownForLine = strLine && strLine.match(/^\s*(.+\S+)\s*$/);
+                                    return arrBreakdownForLine && arrBreakdownForLine.length == 2 && arrBreakdownForLine[1] || null;
+                                },
+
+    /**
+     *  Returns a single non-whitespace token with the index specified on the line with the index specified.
+     *
+     *  @param  indexToken          Number                  0-based index of the token on the line.
+     *  @param  indexLine           Number                  0-based index of the line.
+     */
+    getTokenOnLine:             function(indexToken, indexLine) {
+                                    this._insureTokenLineExists(indexLine);
+                                    return this._arrLineTokens[indexLine][indexToken];
+                                },
+
+    /**
+     *  Returns the total number of non-whitespace tokens on the line with the index specified.
+     *
+     *  @param  indexLine           Number                  0-based index of the line.
+     */
+    getTotalTokensOnLine:       function(indexLine) {
+                                    this._insureTokenLineExists(indexLine);
+                                    return this._arrLineTokens[indexLine].length;
+                                },
+
     setData:                    function(strEncoding, totalChars, totalLines, arrLines) {
                                     this.encoding = strEncoding;
                                     this.totalChars = totalChars;
                                     this.totalLines = totalLines;
                                     this._arrLines = arrLines;
+                                    this._arrLineTokens = [];
+                                },
+
+    _insureTokenLineExists:     function(indexLine) {
+                                    if (this._arrLineTokens[indexLine]) return;
+
+                                    var strLineStripped = this.getLineStripped(indexLine);
+                                    this._arrLineTokens[indexLine] = strLineStripped && strLineStripped.split(/\s/) || [];
                                 }
 }
 
