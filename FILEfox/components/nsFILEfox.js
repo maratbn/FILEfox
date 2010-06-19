@@ -90,6 +90,11 @@ nsFILEfoxTextFileReadOut.prototype = {
                                     return this._arrLines && this._arrLines[indexLine];
                                 },
 
+    /**
+     *  Returns a single line out of the text file, excluding the whitespace bounding the line.
+     *
+     *  @param  indexLine           Number                  0-based index of the line.
+     */
     getLineStripped:            function(indexLine) {
                                     var strLine = this.getLine(indexLine);
                                     arrBreakdownForLine = strLine && strLine.match(/^\s*(.+\S+)\s*$/);
