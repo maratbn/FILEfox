@@ -71,13 +71,6 @@ interface nsIFILEfoxTextFileRead : nsIFILEfoxTextFile {
     readonly attribute unsigned long totalChars;
 
     /**
-     *  Returns the total number of non-whitespace tokens on the line with the index specified.
-     *
-     *  @param  indexLine           Number                  0-based index of the line.
-     */
-    unsigned long getTotalTokensOnLine(in unsigned long indexLine);
-
-    /**
      *  Returns a single non-whitespace token with the index specified on the line with the index specified.
      *
      *  @param  indexToken          Number                  0-based index of the token on the line.
@@ -86,6 +79,13 @@ interface nsIFILEfoxTextFileRead : nsIFILEfoxTextFile {
      *  Note that the token index is specified before the line index.
      */
     string getTokenOnLine(in unsigned long indexToken, in unsigned long indexLine);
+
+    /**
+     *  Returns the total number of non-whitespace tokens on the line with the index specified.
+     *
+     *  @param  indexLine           Number                  0-based index of the line.
+     */
+    unsigned long getTotalTokensOnLine(in unsigned long indexLine);
 };
 
 /**
