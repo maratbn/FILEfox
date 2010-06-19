@@ -91,7 +91,7 @@ nsFILEfoxTextFileReadOut.prototype = {
                                 },
 
     /**
-     *  Returns a single line out of the text file, excluding the whitespace bounding the line.
+     *  Returns a single line out of the text file, stripped of the whitespace bounding it.
      *
      *  @param  indexLine           Number                  0-based index of the line.
      */
