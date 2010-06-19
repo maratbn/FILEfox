@@ -28,3 +28,70 @@ WARNING:  MALICIOUS WEB APPLICATIONS MAY UPLOAD ANY DATA AVAILABLE TO MALICIOUS 
   CONFIGURATION, OR FINANCIAL INFORMATION.
 
 ** RECOMMENDED FOR EXPERIENCED USERS ONLY **
+
+
+RELEASE HISTORY:
+
+2010-06-19  version 0.2.3
+
+Added method:       nsIFILEfox.isVersionAtLeast(...)
+
+                    Returns 'true' if the version of the currently installed FILEfox extension is
+                    at least the version specified.
+
+Added method:       nsIFILEfoxTextFileRead.getLineStripped(...)
+
+                    Returns a single line out of the text file, stripped of the whitespace bounding
+                    it.
+
+Added method:       nsIFILEfoxTextFileRead.getTokenOnLine(...)
+
+                    Returns a single non-whitespace token with the index specified on the line with
+                    the index specified.
+
+Added method:       nsIFILEfoxTextFileRead.getTotalTokensOnLine(...)
+
+                    Returns the total number of non-whitespace tokens on the line with the index
+                    specified.
+
+
+2010-04-28  version 0.2.2
+
+Initial release
+
+Contains method:    nsIFILEfox.getVersion()
+
+                    Returns the version of the currently installed FILEfox extension.
+
+Contains method:    nsIFILEfox.requestLoadASCIIFile(...)
+
+                    Causes the FILEfox extension to request from the user to manually select an
+                    ASCII text file to load.  Upon user approval FILEfox will initiate a Mozilla-
+                    internal synchroneous file loading routine via XPCOM, and then return the file
+                    contents in a data object corresponding to the 'nsIFILEfoxTextFileRead'
+                    interface, or a falsy value on failure.
+
+                    The returned data object should be assigned to a private local variable inside
+                    the calling function and later accessed via closure to prevent exposing it to
+                    other scripts on the page.
+
+Contains property:  nsIFILEfoxTextFile.encoding
+
+                    The encoding with which this text file is encoded.
+
+Contains property:  nsIFILEfoxTextFile.totalLines
+
+                    Total number of lines in the text file.
+
+                    The text file is stored line by line rather than in a single string, as
+                    otherwise a huge file in a huge string would overwhelm the browser's JavaScript
+                    engine.
+
+Contains function:  nsIFILEfoxTextFile.getLine(...)
+
+                    Returns a single line out of the text file, including the line termination
+                    carriage return character sequence.
+
+Contains property:  nsIFILEfoxTextFileRead.totalChars
+
+                    Total number of characters in the text file.
