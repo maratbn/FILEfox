@@ -75,6 +75,21 @@
         </style>
         <title>Welcome to the FILEfox Firefox extension support website</title>
         <script type='text/javascript' src='http://68.168.213.10/FILEfox/testXSSdetection.js'></script>
+
+        <!-- The following 2 <script> tags are not needed to run FILEfox,
+             here they are just used to display the FILEfox instantiation source code
+             in a pretty way -->
+        <!-- The following loads the Dojo-specific stuff for the DCodeView widget: -->
+        <script
+            type='text/javascript'
+            src='/dojo-release-1.5.0/dojo/dojo.js'
+            djConfig="parseOnLoad: true, modulePaths:{'dcodeview':'/dcodeview/dojo_dcodeview/'}">
+        </script>
+        <script type='text/javascript'>
+            // This makes the DCodeView widget available for use on this page:
+            dojo.require('dcodeview.DCodeView');
+        </script>
+
     </head>
     <body class='FILEfox_support'>
         <div class='FILEfox_quick_links'>
@@ -430,7 +445,9 @@
                 <h3>FILEfox API Example:</h3>
                 <div class='section_content'>
                     <h4> JavaScript code</h4>
-<pre class='code'>
+
+<!-- The DCodeView widget will overlay on top of this <pre> tag: -->
+<pre dojoType='dcodeview.DCodeView'>
     function loadFileWithFILEfox() {
         // First, check if FILEfox is installed.
         if (!window.nsFILEfox) {
